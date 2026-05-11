@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lamia's Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- LOBBY SCENE -->
+  <div class="scene active" id="lobby">
+    <img src="images/lobby.png" alt="Library lobby" class="scene-image">
+
+    <button class="sign sign-left" data-room="atrium">
+      <span class="sign-title">The Atrium</span>
+      <span class="sign-sub">leadership · dance</span>
+    </button>
+
+    <button class="sign sign-center" data-room="study">
+      <span class="sign-title">The Study</span>
+      <span class="sign-sub">work · education · skills</span>
+    </button>
+
+    <button class="sign sign-right" data-room="letters">
+      <span class="sign-title">The Letters</span>
+      <span class="sign-sub">contact</span>
+    </button>
+
+    <div class="welcome-card">
+      <div class="welcome-card-inner">
+        <p class="welcome-eyebrow">— welcome —</p>
+        <h1 class="welcome-title">Lamia's Library</h1>
+        <p class="welcome-body">A small archive of a curious life.<br>Choose a hallway to begin.</p>
+        <p class="welcome-foot">est. 2026</p>
+      </div>
+    </div>
+  </div>
+
+<!-- THE STUDY -->
+<div class="scene" id="study">
+  <img src="images/study.png" alt="The Study" class="scene-image">
+  <div class="room-title">
+    <h2>The Study</h2>
+    <p>work · education · skills · projects</p>
+  </div>
+  <button class="back-button">← back to the lobby</button>
+
+  <!-- Four study cards -->
+  <div class="study-cards">
+
+    <!-- WORK EXPERIENCE -->
+    <div class="study-card" data-card="work">
+      <div class="study-card-preview">
+        <p class="card-eyebrow">— work —</p>
+        <h3 class="card-title">Experience</h3>
+        <p class="card-teaser">Library aide, teaching assistant, mentor</p>
+      </div>
+      <div class="study-card-full">
+        <p class="card-eyebrow">— work experience —</p>
+        <h3 class="card-title">Where I've Worked</h3>
+
+        <div class="entry">
+          <div class="entry-head">
+            <h4>Library Aide</h4>
+            <span class="entry-date">Jul 2025 – Present</span>
+          </div>
+          <p class="entry-sub">Arizona State University · Tempe, AZ</p>
+          <ul>
+            <li>Assisted 200+ students/week with academic resources, improving access efficiency by 30%</li>
+            <li>Manage circulation, shelving, and digital systems with 100% policy compliance</li>
+            <li>Support quiet-study and collaborative spaces for 150+ patrons</li>
+          </ul>
+        </div>
+
+        <div class="entry">
+          <div class="entry-head">
+            <h4>Teaching Assistant</h4>
+            <span class="entry-date">May 2023 – Dec 2023</span>
+          </div>
+          <p class="entry-sub">Coaching Center · Dhaka, Bangladesh</p>
+          <ul>
+            <li>Tutored 100+ O Level Mathematics students, adapting to different learning styles</li>
+            <li>Assisted 20+ children in a Kumon-based program, monitoring progress and giving feedback</li>
+            <li>Led 50+ hours of office-hour support sessions on study strategies and learning challenges</li>
+          </ul>
+        </div>
+
+        <div class="entry">
+          <div class="entry-head">
+            <h4>Fellow Mentor</h4>
+            <span class="entry-date">Jan 2023 – May 2023</span>
+          </div>
+          <p class="entry-sub">BRAC Kumon · Dhaka, Bangladesh</p>
+          <ul>
+            <li>Provided academic guidance to 40+ students</li>
+            <li>Adapted teaching strategies, achieving 95% student satisfaction</li>
+            <li>Hosted weekly personalized meetings with tailored resources</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="study-card" data-card="education">
+      <div class="study-card-preview">
+        <p class="card-eyebrow">— education —</p>
+        <h3 class="card-title">Studies</h3>
+        <p class="card-teaser">Computer Science at Arizona State University</p>
+      </div>
+      <div class="study-card-full">
+        <p class="card-eyebrow">— education —</p>
+        <h3 class="card-title">Where I'm Learning</h3>
+
+        <div class="entry">
+          <div class="entry-head">
+            <h4>B.S.E. in Computer Science</h4>
+            <span class="entry-date">Jan 2024 – Jan 2028</span>
+          </div>
+          <p class="entry-sub">Arizona State University · Tempe, AZ</p>
+          <p class="entry-detail"><strong>GPA:</strong> 3.89 / 4.00</p>
+          <p class="entry-detail"><strong>Coursework:</strong> Calculus & Statistics, Object-Oriented Programming, Data Structures and Algorithms, Digital Design</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="study-card" data-card="skills">
+      <div class="study-card-preview">
+        <p class="card-eyebrow">— skills —</p>
+        <h3 class="card-title">Toolkit</h3>
+        <p class="card-teaser">Languages, frameworks, and the words I speak</p>
+      </div>
+      <div class="study-card-full">
+        <p class="card-eyebrow">— skills & languages —</p>
+        <h3 class="card-title">What I Speak</h3>
+
+        <div class="skills-group">
+          <h4>Programming</h4>
+          <p>Python · C · C++ · Java · JUnit · SQL</p>
+        </div>
+
+        <div class="skills-group">
+          <h4>Design & Productivity</h4>
+          <p>Notion · Microsoft Office · Google Docs · Canva · Sprint Backlog</p>
+        </div>
+
+        <div class="skills-group">
+          <h4>Spoken Languages</h4>
+          <p><strong>Native:</strong> Bengali</p>
+          <p><strong>Professional:</strong> English · Hindi · Urdu</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="study-card" data-card="projects">
+      <div class="study-card-preview">
+        <p class="card-eyebrow">— projects —</p>
+        <h3 class="card-title">Built Things</h3>
+        <p class="card-teaser">A wearable, a factory floor, and a library</p>
+      </div>
+      <div class="study-card-full">
+        <p class="card-eyebrow">— projects —</p>
+        <h3 class="card-title">What I've Built</h3>
+
+        <div class="entry">
+          <div class="entry-head">
+            <h4>360 Hat</h4>
+            <span class="entry-date">Mar 2024 – May 2024</span>
+          </div>
+          <p class="entry-sub">A wearable spatial-awareness device</p>
+          <ul>
+            <li>Uses 4 ultrasonic sensors and a gyro sensor for real-time object tracking</li>
+            <li>Detects up to 400 cm and classifies movement into 3 speed tiers, triggering feedback</li>
+            <li>Compact design integrating vibration motors and headphones</li>
+          </ul>
+        </div>
+
+        <div class="entry">
+          <div class="entry-head">
+            <h4>Assembly Line Operations</h4>
+            <span class="entry-date">Feb 2023 – Mar 2023</span>
+          </div>
+          <p class="entry-sub">LEGO Builders Inc. · Production design project</p>
+          <ul>
+            <li>Designed a hybrid race car-SUV, optimizing production to minimize cost by 15%</li>
+            <li>Achieved 87.5% efficiency with 5,080 units/month output</li>
+            <li>Projected $2.71M net profit by May of year one</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  <!-- THE ATRIUM -->
+<div class="scene" id="atrium">
+  <img src="images/atrium.png" alt="The Atrium" class="scene-image">
+  <div class="room-title">
+    <h2>The Atrium</h2>
+    <p>community · scouts · movement</p>
+  </div>
+  <button class="back-button">← back to the lobby</button>
+
+  <!-- Three atrium cards -->
+  <div class="study-cards atrium-grid">
+
+    <!-- COMMUNITY -->
+    <div class="study-card" data-card="community">
+      <div class="study-card-preview">
+        <p class="card-eyebrow">— community —</p>
+        <h3 class="card-title">Showing Up</h3>
+        <p class="card-teaser">Events, leadership training, and 500+ attendees</p>
+      </div>
+      <div class="study-card-full">
+        <p class="card-eyebrow">— community involvement —</p>
+        <h3 class="card-title">Showing Up for Others</h3>
+
+        <div class="entry">
+          <div class="entry-head">
+            <h4>Volunteer · Connecting International Communities</h4>
+            <span class="entry-date">Feb 2024 – Present</span>
+          </div>
+          <p class="entry-sub">Tempe, Arizona</p>
+          <ul>
+            <li>Led events like Carnival Night and Masquerade, serving 500+ attendees</li>
+            <li>Managed 300+ event attendees through streamlined check-in</li>
+            <li>Orchestrated games and directed player participation, boosting engagement by 70%</li>
+          </ul>
+        </div>
+
+        <div class="entry">
+          <div class="entry-head">
+            <h4>Building Bridges Through Leadership Training Junior</h4>
+            <span class="entry-date">Nov 2020 – Dec 2020</span>
+          </div>
+          <p class="entry-sub">Bangladesh Youth Leadership Centre</p>
+          <p class="entry-detail">A month-long BYLC course focused on teamwork, critical thinking, healthy communication, and leadership.</p>
+          <ul>
+            <li>Conducted a local survey engaging 100+ participants, culminating in a workshop</li>
+            <li>Educated 250+ underprivileged students on the dangers of drug abuse</li>
+            <li>Initiated a tree plantation project, distributing 10,000+ seeds in local communities</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCOUTS -->
+    <div class="study-card" data-card="scouts">
+      <div class="study-card-preview">
+        <p class="card-eyebrow">— scouts —</p>
+        <h3 class="card-title">The Patrol</h3>
+        <p class="card-teaser">Four years, 1000+ scouts, one President's Award</p>
+      </div>
+      <div class="study-card-full">
+        <p class="card-eyebrow">— scouting —</p>
+        <h3 class="card-title">Years in the Field</h3>
+
+        <div class="entry">
+          <div class="entry-head">
+            <h4>Senior Patrol Leader</h4>
+            <span class="entry-date">May 2015 – Dec 2019</span>
+          </div>
+          <p class="entry-sub">719 Sunnydale Scout Group · Dhaka, Bangladesh</p>
+          <ul>
+            <li>Guided a group of 1,000+ scouts, overseeing operations and training</li>
+            <li>Spearheaded 30+ Scout Camps, Scout Owns, and PLC meetings, deepening group engagement</li>
+            <li>Earned the President's Scout Award 2019 — the Bangladeshi equivalent of the Eagle Scout</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- MOVEMENT (Dance) -->
+    <div class="study-card" data-card="movement">
+      <div class="study-card-preview">
+        <p class="card-eyebrow">— movement —</p>
+        <h3 class="card-title">Dance</h3>
+        <p class="card-teaser">Classical training, then a stage at ASU</p>
+      </div>
+      <div class="study-card-full">
+        <p class="card-eyebrow">— movement —</p>
+        <h3 class="card-title">A Life in Dance</h3>
+
+        <div class="entry">
+          <div class="entry-head">
+            <h4>Lasya at ASU</h4>
+            <span class="entry-date">Current</span>
+          </div>
+          <p class="entry-sub">Arizona State University · Tempe, Arizona</p>
+          <p class="entry-detail">Performing classical and contemporary South Asian dance with Lasya, ASU's cultural dance group.</p>
+        </div>
+
+        <div class="entry">
+          <div class="entry-head">
+            <h4>Chhayanaut & Nritya Nandan</h4>
+            <span class="entry-date">Jan 2012 – Jan 2020</span>
+          </div>
+          <p class="entry-sub">Classical Dance Training · Dhaka, Bangladesh</p>
+          <p class="entry-detail">Eight years of classical training in <strong>Manipuri, Bharatnatyam, Odissi,</strong> and <strong>Contemporary</strong> dance styles.</p>
+          <ul>
+            <li>Participated in numerous workshops, inter-school olympiads, and dance festivals</li>
+            <li>Built a foundation in expression, discipline, and storytelling through movement</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- THE LETTERS -->
+<div class="scene" id="letters">
+  <img src="images/letters.png" alt="The Letters" class="scene-image">
+  <div class="room-title">
+    <h2>The Letters</h2>
+    <p>send a note</p>
+  </div>
+  <button class="back-button">← back to the lobby</button>
+
+  <!-- The letter on the desk -->
+  <form class="letter" action="https://formspree.io/f/xqenwpnr" method="POST">
+
+    <div class="letter-header">
+      <p class="letter-date">written this very moment</p>
+      <p class="letter-greeting">Dear Lamia,</p>
+    </div>
+
+    <div class="letter-field">
+      <label for="name">From</label>
+      <input type="text" id="name" name="name" placeholder="your name" required>
+    </div>
+
+    <div class="letter-field">
+      <label for="email">Return address</label>
+      <input type="email" id="email" name="email" placeholder="your.email@somewhere.com" required>
+    </div>
+
+    <div class="letter-field">
+      <label for="subject">Regarding</label>
+      <input type="text" id="subject" name="subject" placeholder="what brings you here" required>
+    </div>
+
+    <div class="letter-field">
+      <label for="message">Your letter</label>
+      <textarea id="message" name="message" rows="6" placeholder="write whatever you'd like to say…" required></textarea>
+    </div>
+
+    <div class="letter-footer">
+      <p class="letter-signoff">Warmly,</p>
+      <button type="submit" class="letter-send">Seal & Send →</button>
+    </div>
+
+    <p class="letter-status"></p>
+  </form>
+</div>
+
+  <div class="study-backdrop"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
