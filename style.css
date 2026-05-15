@@ -630,3 +630,288 @@ body {
 
 .letter-status.success { color: #2e6d4f; }
 .letter-status.error   { color: #8a2e2e; }
+
+/* ============================================
+   MOBILE LAYOUT (≤768px)
+   ============================================ */
+
+/* Hide mobile elements on desktop */
+.mobile-carousel { display: none; }
+
+@media (max-width: 768px) {
+
+  /* ============ LOBBY MOBILE ============ */
+
+  .scene-image.desktop-only,
+  .desktop-signs {
+    display: none;
+  }
+
+  .mobile-carousel {
+    display: block;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .carousel-track {
+    display: flex;
+    width: 300%;
+    height: 100%;
+    transition: transform 0.5s ease;
+    will-change: transform;
+  }
+
+  .carousel-slide {
+    position: relative;
+    width: 33.333%;
+    height: 100%;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .carousel-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .carousel-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 12%;
+  }
+
+  .mobile-sign {
+    background: rgba(40, 25, 10, 0.55);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(245, 230, 200, 0.35);
+    color: #f5e6c8;
+    font-family: 'Cormorant Garamond', serif;
+    padding: 16px 28px;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  }
+
+  .mobile-sign .sign-title {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .mobile-sign .sign-sub {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    font-style: italic;
+    margin-top: 4px;
+    opacity: 0.9;
+  }
+
+  .carousel-dots {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 5;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(245, 230, 200, 0.4);
+    border: 1px solid rgba(245, 230, 200, 0.6);
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+
+  .dot.active {
+    background: #f5e6c8;
+    transform: scale(1.3);
+  }
+
+  .carousel-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem;
+    color: #f5e6c8;
+    letter-spacing: 3px;
+    font-style: italic;
+    opacity: 0.7;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    z-index: 5;
+  }
+
+  /* ============ WELCOME CARD MOBILE ============ */
+
+  .welcome-card {
+    width: 88vw !important;
+    padding: 28px 32px;
+    top: 50% !important;
+  }
+
+  .welcome-title {
+    font-size: 1.8rem !important;
+  }
+
+  .welcome-body {
+    font-size: 0.9rem;
+  }
+
+  /* ============ ROOM TITLE MOBILE ============ */
+
+  .room-title {
+    top: 4%;
+  }
+
+  .room-title h2 {
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+  }
+
+  .room-title p {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+  }
+
+  /* ============ BACK BUTTON MOBILE ============ */
+
+  .back-button {
+    top: 16px;
+    left: 16px;
+    font-size: 0.8rem;
+    padding: 8px 14px;
+  }
+
+  /* ============ STUDY CARDS MOBILE (2x2 smaller) ============ */
+
+  .study-cards:not(.atrium-grid) {
+    grid-template-columns: 145px 145px;
+    grid-template-rows: 95px 95px;
+    gap: 14px;
+  }
+
+  .study-card {
+    padding: 12px 14px;
+  }
+
+  .card-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    margin-bottom: 4px;
+  }
+
+  .card-title {
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+
+  .card-teaser {
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
+
+  /* ============ ATRIUM CARDS MOBILE (triangle: 1 on top, 2 below) ============ */
+
+  .atrium-grid {
+    grid-template-columns: 145px 145px !important;
+    grid-template-rows: 95px 95px !important;
+    gap: 14px;
+  }
+
+  .atrium-grid .study-card:nth-child(1) {
+    grid-column: 1 / 3;
+    justify-self: center;
+    width: 165px;
+  }
+
+  .atrium-grid .study-card:nth-child(2) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .atrium-grid .study-card:nth-child(3) {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  /* ============ EXPANDED CARD MOBILE ============ */
+
+  .study-card.expanded {
+    width: 92vw !important;
+    max-height: 88vh;
+    padding: 28px 24px;
+  }
+
+  .study-card.expanded .card-title {
+    font-size: 1.4rem;
+    margin-bottom: 14px;
+  }
+
+  .study-card.expanded .card-eyebrow {
+    font-size: 0.7rem;
+  }
+
+  .entry-head h4 {
+    font-size: 1rem;
+  }
+
+  .entry ul li,
+  .entry-detail,
+  .entry-sub {
+    font-size: 0.85rem;
+  }
+
+  /* ============ LETTERS FORM MOBILE ============ */
+
+  .letter {
+    width: 92vw !important;
+    padding: 28px 24px;
+    max-height: 78vh;
+  }
+
+  .letter-greeting {
+    font-size: 1.3rem;
+  }
+
+  .letter-field input,
+  .letter-field textarea {
+    font-size: 0.95rem;
+  }
+
+  .letter-field label {
+    font-size: 0.7rem;
+  }
+
+  .letter-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .letter-signoff {
+    text-align: center;
+    font-size: 1.05rem;
+  }
+
+  .letter-send {
+    font-size: 0.9rem;
+    padding: 12px 20px;
+  }
+}

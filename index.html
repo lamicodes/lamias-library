@@ -10,9 +10,12 @@
 <body>
 
   <!-- LOBBY SCENE -->
-  <div class="scene active" id="lobby">
-    <img src="images/lobby.png" alt="Library lobby" class="scene-image">
+<!-- LOBBY SCENE -->
+<div class="scene active" id="lobby">
+  <img src="images/lobby.png" alt="Library lobby" class="scene-image desktop-only">
 
+  <!-- Desktop signs (hidden on mobile) -->
+  <div class="desktop-signs">
     <button class="sign sign-left" data-room="atrium">
       <span class="sign-title">The Atrium</span>
       <span class="sign-sub">leadership · dance</span>
@@ -27,16 +30,62 @@
       <span class="sign-title">The Letters</span>
       <span class="sign-sub">contact</span>
     </button>
+  </div>
 
-    <div class="welcome-card">
-      <div class="welcome-card-inner">
-        <p class="welcome-eyebrow">— welcome —</p>
-        <h1 class="welcome-title">Lamia's Library</h1>
-        <p class="welcome-body">A small archive of a curious life.<br>Choose a hallway to begin.</p>
-        <p class="welcome-foot">est. 2026</p>
+  <!-- Mobile carousel (hidden on desktop) -->
+  <div class="mobile-carousel">
+    <div class="carousel-track">
+
+      <div class="carousel-slide" data-room="atrium">
+        <img src="images/lobby.png" alt="" class="carousel-bg" style="object-position: left center;">
+        <div class="carousel-content">
+          <button class="mobile-sign" data-room="atrium">
+            <span class="sign-title">The Atrium</span>
+            <span class="sign-sub">leadership · dance</span>
+          </button>
+        </div>
       </div>
+
+      <div class="carousel-slide" data-room="study">
+        <img src="images/lobby.png" alt="" class="carousel-bg" style="object-position: center center;">
+        <div class="carousel-content">
+          <button class="mobile-sign" data-room="study">
+            <span class="sign-title">The Study</span>
+            <span class="sign-sub">work · education · skills</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="carousel-slide" data-room="letters">
+        <img src="images/lobby.png" alt="" class="carousel-bg" style="object-position: right center;">
+        <div class="carousel-content">
+          <button class="mobile-sign" data-room="letters">
+            <span class="sign-title">The Letters</span>
+            <span class="sign-sub">contact</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="carousel-dots">
+      <button class="dot active" data-slide="0"></button>
+      <button class="dot" data-slide="1"></button>
+      <button class="dot" data-slide="2"></button>
+    </div>
+
+    <p class="carousel-hint">← swipe to explore →</p>
+  </div>
+
+  <div class="welcome-card">
+    <div class="welcome-card-inner">
+      <p class="welcome-eyebrow">— welcome —</p>
+      <h1 class="welcome-title">Lamia's Library</h1>
+      <p class="welcome-body">A small archive of a curious life.<br>Choose a hallway to begin.</p>
+      <p class="welcome-foot">est. 2026</p>
     </div>
   </div>
+</div>
 
 <!-- THE STUDY -->
 <div class="scene" id="study">
