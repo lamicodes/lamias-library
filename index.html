@@ -9,73 +9,27 @@
 </head>
 <body>
 
-  <!-- LOBBY SCENE -->
-<!-- LOBBY SCENE -->
+ <!-- LOBBY SCENE -->
 <div class="scene active" id="lobby">
-  <img src="images/lobby.png" alt="Library lobby" class="scene-image desktop-only">
+  <picture>
+    <source media="(max-width: 768px)" srcset="images/lobby-mobile.png">
+    <img src="images/lobby.png" alt="Library lobby" class="scene-image">
+  </picture>
 
-  <!-- Desktop signs (hidden on mobile) -->
-  <div class="desktop-signs">
-    <button class="sign sign-left" data-room="atrium">
-      <span class="sign-title">The Atrium</span>
-      <span class="sign-sub">leadership · dance</span>
-    </button>
+  <button class="sign sign-left" data-room="atrium">
+    <span class="sign-title">The Atrium</span>
+    <span class="sign-sub">leadership · dance</span>
+  </button>
 
-    <button class="sign sign-center" data-room="study">
-      <span class="sign-title">The Study</span>
-      <span class="sign-sub">work · education · skills</span>
-    </button>
+  <button class="sign sign-center" data-room="study">
+    <span class="sign-title">The Study</span>
+    <span class="sign-sub">work · education · skills</span>
+  </button>
 
-    <button class="sign sign-right" data-room="letters">
-      <span class="sign-title">The Letters</span>
-      <span class="sign-sub">contact</span>
-    </button>
-  </div>
-
-  <!-- Mobile carousel (hidden on desktop) -->
-  <div class="mobile-carousel">
-    <div class="carousel-track">
-
-      <div class="carousel-slide" data-room="atrium">
-        <img src="images/lobby.png" alt="" class="carousel-bg" style="object-position: left center;">
-        <div class="carousel-content">
-          <button class="mobile-sign" data-room="atrium">
-            <span class="sign-title">The Atrium</span>
-            <span class="sign-sub">leadership · dance</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="carousel-slide" data-room="study">
-        <img src="images/lobby.png" alt="" class="carousel-bg" style="object-position: center center;">
-        <div class="carousel-content">
-          <button class="mobile-sign" data-room="study">
-            <span class="sign-title">The Study</span>
-            <span class="sign-sub">work · education · skills</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="carousel-slide" data-room="letters">
-        <img src="images/lobby.png" alt="" class="carousel-bg" style="object-position: right center;">
-        <div class="carousel-content">
-          <button class="mobile-sign" data-room="letters">
-            <span class="sign-title">The Letters</span>
-            <span class="sign-sub">contact</span>
-          </button>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="carousel-dots">
-      <button class="dot active" data-slide="0"></button>
-      <button class="dot" data-slide="1"></button>
-      <button class="dot" data-slide="2"></button>
-    </div>
-
-    <p class="carousel-hint">← swipe to explore →</p>
-  </div>
+  <button class="sign sign-right" data-room="letters">
+    <span class="sign-title">The Letters</span>
+    <span class="sign-sub">contact</span>
+  </button>
 
   <div class="welcome-card">
     <div class="welcome-card-inner">
@@ -89,7 +43,10 @@
 
 <!-- THE STUDY -->
 <div class="scene" id="study">
+  <picture>
+  <source media="(max-width: 768px)" srcset="images/study-mobile.png">
   <img src="images/study.png" alt="The Study" class="scene-image">
+</picture>
   <div class="room-title">
     <h2>The Study</h2>
     <p>work · education · skills · projects</p>
@@ -249,7 +206,10 @@
 
   <!-- THE ATRIUM -->
 <div class="scene" id="atrium">
+ <picture>
+  <source media="(max-width: 768px)" srcset="images/atrium-mobile.png">
   <img src="images/atrium.png" alt="The Atrium" class="scene-image">
+</picture>
   <div class="room-title">
     <h2>The Atrium</h2>
     <p>community · scouts · movement</p>
@@ -365,7 +325,10 @@
 
 <!-- THE LETTERS -->
 <div class="scene" id="letters">
+  <picture>
+  <source media="(max-width: 768px)" srcset="images/letters-mobile.png">
   <img src="images/letters.png" alt="The Letters" class="scene-image">
+</picture>
   <div class="room-title">
     <h2>The Letters</h2>
     <p>send a note</p>
