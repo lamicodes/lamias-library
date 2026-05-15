@@ -629,10 +629,10 @@ body {
 
 @media (max-width: 768px) {
 
-  /* MOBILE LOBBY SIGN POSITIONS (overrides desktop) */
+ /* MOBILE LOBBY SIGN POSITIONS — positioned on actual arches in the image */
   .sign-left {
-    top: 28% !important;
-    left: 6% !important;
+    top: 42% !important;
+    left: 8% !important;
     transform: rotate(0deg) !important;
   }
   .sign-left:hover {
@@ -640,7 +640,7 @@ body {
   }
 
   .sign-center {
-    top: 25% !important;
+    top: 36% !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
   }
@@ -649,30 +649,31 @@ body {
   }
 
   .sign-right {
-    top: 28% !important;
-    right: 6% !important;
+    top: 42% !important;
+    right: 8% !important;
     transform: rotate(0deg) !important;
   }
   .sign-right:hover {
     transform: rotate(0deg) translateY(-4px) scale(1.05) !important;
   }
 
+  /* Smaller sign text on mobile */
   .sign-left .sign-title,
   .sign-right .sign-title {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     letter-spacing: 1px;
   }
   .sign-left .sign-sub,
   .sign-right .sign-sub {
-    font-size: 0.5rem;
+    font-size: 0.45rem;
     letter-spacing: 0.5px;
   }
   .sign-center .sign-title {
-    font-size: 0.95rem;
+    font-size: 0.8rem;
     letter-spacing: 1.5px;
   }
   .sign-center .sign-sub {
-    font-size: 0.6rem;
+    font-size: 0.55rem;
   }
 
   /* WELCOME CARD MOBILE */
@@ -823,5 +824,42 @@ body {
   .letter-send {
     font-size: 0.9rem;
     padding: 12px 20px;
+  }
+
+
+  /* Move back button higher up so it doesn't collide with room title */
+  .back-button {
+    top: 70px !important;
+    left: 12px !important;
+    font-size: 0.7rem !important;
+    padding: 6px 10px !important;
+  }
+
+  /* Move room title down a tiny bit so back button has room above it */
+  .room-title {
+    top: 8% !important;
+  }
+
+  /* Move welcome card up so it doesn't hide signs */
+  .welcome-card {
+    top: 70% !important;
+    padding: 20px 24px !important;
+  }
+
+  .welcome-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 12px;
+  }
+
+  .welcome-body {
+    font-size: 0.85rem !important;
+    margin-bottom: 14px;
+  }
+
+  /* Tighter Letters form on mobile so it fits the screen */
+  .letter {
+    max-height: 75vh !important;
+    padding: 24px 22px !important;
+    top: 52% !important;
   }
 }
