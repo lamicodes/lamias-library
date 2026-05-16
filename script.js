@@ -108,3 +108,50 @@ if (letterForm) {
     }
   });
 }
+
+// MOBILE LOBBY CAROUSEL
+const carouselTrack = document.querySelector('.carousel-track');
+const dots = document.querySelectorAll('.carousel-dots .dot');
+const carouselSlides = document.querySelectorAll('.carousel-slide');
+
+let currentSlide = 0;
+let touchStartX = 0;
+let touchEndX = 0;
+
+function goToSlide(index) {
+  if (!carouselTrack) return;
+  currentSlide = Math.max(0, Math.min(2, index));
+  carouselTrack.style.transform = `translateX(-${currentSlide * 33.333}%)`;
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('active', i === currentSlide);
+  });
+}
+
+// Dot click navigation
+dots.forEach((dot, i) => {
+  dot.addEventListener('click', () => goToSlide(i));
+});
+
+// Swipe detection on the carousel
+if (carouselTrack) {
+  carouselTrack.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  carouselTrack.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) goToSlide(currentSlide + 1); // swipe left → next
+      else goToSlide(currentSlide - 1); // swipe right → previous
+    }
+  }, { passive: true });
+}
+
+// Mobile signs trigger same room navigation as desktop signs
+document.querySelectorAll('.mobile-sign').forEach(sign => {
+  sign.addEventListener('click', () => {
+    const room = sign.dataset.room;
+    goToScene(room);
+  });
+});

@@ -631,16 +631,16 @@ body {
 
  /* MOBILE LOBBY SIGN POSITIONS — positioned on actual arches in the image */
   .sign-left {
-    top: 42% !important;
-    left: 8% !important;
-    transform: rotate(0deg) !important;
+    top: 34% !important;
+    left: 5% !important;
+    transform: rotate(8deg) !important;
   }
   .sign-left:hover {
-    transform: rotate(0deg) translateY(-4px) scale(1.05) !important;
+    transform: rotate(-25deg) translateY(-4px) scale(-10.05) !important;
   }
 
   .sign-center {
-    top: 36% !important;
+    top: 35% !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
   }
@@ -649,12 +649,12 @@ body {
   }
 
   .sign-right {
-    top: 42% !important;
-    right: 8% !important;
-    transform: rotate(0deg) !important;
+    top: 34% !important;
+    right: 5% !important;
+    transform: rotate(-8deg) !important;
   }
   .sign-right:hover {
-    transform: rotate(0deg) translateY(-4px) scale(1.05) !important;
+    transform: rotate(25deg) translateY(-4px) scale(10.05) !important;
   }
 
   /* Smaller sign text on mobile */
