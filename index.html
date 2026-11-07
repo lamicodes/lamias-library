@@ -6,6 +6,33 @@
   <title>Lamia's Library</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+  /* Figma mobile prototype — hidden on desktop */
+  #figma-mobile {
+    display: none;
+  }
+
+  /* Show Figma prototype on phones */
+  @media screen and (max-width: 768px) {
+    #figma-mobile {
+      display: block;
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      z-index: 99999;
+      background: #21170f;
+    }
+
+    #figma-mobile iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  }
+</style>
 </head>
 <body>
 
