@@ -11,6 +11,7 @@ body {
   height: 100vh;
   width: 100vw;
 }
+body.dialog-open { overflow: hidden; }
 
 /* SCENE — single merged definition */
 .scene {
@@ -270,6 +271,7 @@ body {
   align-items: center;
   justify-content: center;
 }
+.study-card:focus-visible { outline: 3px solid #fff0be; outline-offset: 4px; }
 
 .study-card:hover {
   transform: translateY(-4px) scale(1.02);
@@ -285,36 +287,6 @@ body {
 
 .study-card-full {
   display: none;
-}
-
-.study-card.expanded {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: min(700px, 90vw);
-  max-height: 85vh;
-  transform: translate(-50%, -50%) !important;
-  z-index: 50;
-  overflow-y: auto;
-  padding: 50px 60px;
-  cursor: default;
-}
-
-.study-card.expanded .study-card-preview { display: none; }
-.study-card.expanded .study-card-full    { display: block; }
-
-.study-backdrop {
-  position: fixed;
-  inset: 0;
-  background: transparent;
-  z-index: 40;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-}
-.study-backdrop.active {
-  opacity: 1;
-  pointer-events: auto;
 }
 
 .card-eyebrow {
@@ -344,15 +316,6 @@ body {
   line-height: 1.4;
 }
 
-.study-card.expanded .card-title {
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
-
-.study-card.expanded .card-eyebrow {
-  font-size: 0.9rem;
-  margin-bottom: 14px;
-}
 
 .entry {
   margin-bottom: 24px;
@@ -435,24 +398,256 @@ body {
   line-height: 1.6;
 }
 
-.card-close {
-  position: absolute;
-  top: 16px;
-  right: 20px;
-  background: none;
-  border: none;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.5rem;
-  color: #7a4f1c;
-  cursor: pointer;
-  line-height: 1;
+/* Projects expand independently in the same parchment panel. */
+.project-list { border-top: 1px solid rgba(125, 88, 42, 0.23); }
+.project-item { border-bottom: 1px solid rgba(125, 88, 42, 0.28); }
+.project-item summary { cursor: pointer; list-style: none; padding: 13px 0; }
+.project-item summary::-webkit-details-marker { display: none; }
+.project-item summary > span { display: flex; flex-direction: column; gap: 3px; padding-right: 23px; position: relative; }
+.project-item summary > span::after { content: '›'; position: absolute; top: 3px; right: 2px; font-size: 1.5rem; color: #745b37; transition: transform .2s ease; }
+.project-item[open] summary > span::after { transform: rotate(90deg); }
+.project-item summary strong { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 500; line-height: 1.1; color: #2e1a08; }
+.project-item summary small { color: #675744; font: .66rem/1.3 Arial, sans-serif; letter-spacing: .5px; }
+.project-item summary span span { color: #38291c; font-size: 1rem; }
+.project-item > p { padding: 0 20px 16px 0; font-size: 1rem; line-height: 1.5; }
+.project-github-link { display: inline-block; margin: 0 0 16px; padding: 7px 10px; border: 1px solid rgba(104, 68, 30, .35); border-radius: 3px; color: #553718; font: 600 .9rem/1.4 'EB Garamond', serif; text-decoration: underline; text-underline-offset: 3px; }
+.project-github-link:hover, .project-github-link:focus-visible { background: rgba(198, 151, 79, .18); }
+
+/* All detail dialogs sit above the rooms, never inside a transformed card grid. */
+.mobile-panel,
+.mobile-panel-backdrop { display: none; }
+.mobile-panel-backdrop:not([hidden]) {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(20, 12, 5, .62);
 }
-.card-close:hover { color: #2e1a08; }
+.mobile-panel-header { position: sticky; z-index: 3; top: 0; background: #f0e2c3; }
+
+@media screen and (min-width: 769px) {
+  .mobile-panel:not([hidden]) {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(920px, 88vw);
+    max-height: min(84vh, 880px);
+    padding: 30px clamp(32px, 4vw, 58px) 48px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+    overscroll-behavior: contain;
+    background: #f0e2c3;
+    border: 1.5px solid #be9659;
+    border-radius: 10px;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, .65);
+    color: #392a1f;
+    z-index: 91;
+  }
+  .mobile-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 0 10px;
+    margin-bottom: 6px;
+  }
+  .mobile-panel-section { font: .78rem/1.4 Arial, sans-serif; color: #746652; letter-spacing: .07em; text-transform: uppercase; }
+  .mobile-panel-close { background: transparent; border: none; color: #3b2a1d; font: 1.9rem/1 'Cormorant Garamond', serif; padding: 5px; min-width: 44px; min-height: 44px; cursor: pointer; }
+  .mobile-panel-content > .card-eyebrow { display: none; }
+  .mobile-panel-content > .card-title { font: 500 2.7rem/1.08 'Cormorant Garamond', serif; letter-spacing: 0; color: #302219; padding-bottom: 20px; margin-bottom: 23px; border-bottom: 1px solid #d5b784; }
+  .mobile-panel-content .entry { margin-bottom: 28px; padding-bottom: 24px; }
+  .mobile-panel-content .entry-head h4 { font-size: 1.5rem; }
+  .mobile-panel-content .entry-date { font-size: .95rem; }
+  .mobile-panel-content .entry-sub { font-size: 1rem; }
+  .mobile-panel-content .entry-detail { font-size: 1.08rem; line-height: 1.5; }
+  .mobile-panel-content .entry ul li { font-size: 1.05rem; line-height: 1.55; margin-bottom: 9px; }
+  .mobile-panel-content .skills-group h4 { font-size: 1.6rem; }
+  .mobile-panel-content .skills-group p { font-size: 1.1rem; }
+  .mobile-panel-content .project-item summary strong { font-size: 1.9rem; }
+  .mobile-panel-content .project-item summary span span { font-size: 1.07rem; }
+  .mobile-panel-content .project-item > p { font-size: 1.08rem; }
+  .mobile-panel-content .project-github-link { font-size: 1rem; min-height: 44px; padding: 10px 13px; }
+}
+
+/* Desktop lobby: keep the existing center welcome card and room signs intact.
+   The new linked objects sit to either side, near the bottom of the room. */
+@media screen and (min-width: 769px) {
+  #lobby .mobile-link-shelf {
+    position: absolute;
+    left: clamp(22px, 4vw, 68px);
+    right: clamp(22px, 4vw, 68px);
+    bottom: clamp(12px, 2.5vh, 28px);
+    z-index: 12;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    pointer-events: none;
+  }
+  #lobby .mobile-link-shelf a { pointer-events: auto; }
+  #lobby .linkedin-calling-card {
+    display: block;
+    width: clamp(130px, 17vw, 225px);
+    transform: rotate(-3deg);
+    transition: transform .25s ease;
+  }
+  #lobby .linkedin-calling-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, .52));
+  }
+  #lobby .linkedin-calling-card:hover,
+  #lobby .linkedin-calling-card:focus-visible { transform: rotate(-2deg) translateY(-5px); }
+  #lobby .code-vault-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    max-width: 230px;
+    text-align: center;
+  }
+  #lobby .code-vault-link { display: block; width: clamp(120px, 13vw, 185px); line-height: 0; }
+  #lobby .code-vault-link img {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(1px 0 #f5ebd8) drop-shadow(-1px 0 #f5ebd8)
+            drop-shadow(0 1px #f5ebd8) drop-shadow(0 -1px #f5ebd8)
+            drop-shadow(0 0 9px rgba(245,235,216,.4));
+    transition: transform .25s ease;
+  }
+  #lobby .code-vault-link:hover img,
+  #lobby .code-vault-link:focus-visible img { transform: scale(1.045); }
+  #lobby .vault-heading {
+    color: #f5ebd8;
+    font: 600 clamp(.95rem, 1.4vw, 1.25rem)/1.1 'Cormorant Garamond', serif;
+    letter-spacing: .06em;
+    text-shadow: 0 2px 6px #180d05;
+  }
+  #lobby .vault-subtitle {
+    color: #f5ebd8;
+    font: .77rem/1.3 Arial, sans-serif;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-shadow: 0 2px 6px #180d05;
+  }
+  #lobby .mobile-link-shelf a:focus-visible {
+    outline: 2px solid #f5ebd8;
+    outline-offset: 4px;
+  }
+}
 
 /* ATRIUM — 3 cards in one row (desktop) */
 .atrium-grid {
   grid-template-columns: 220px 220px 220px;
   grid-template-rows: 130px;
+}
+
+/* =============================================================
+   REAL MOBILE WEBSITE — matches the Figma direction without iframe.
+   This section overrides only phone layouts; desktop stays intact.
+   ============================================================= */
+@media screen and (max-width: 768px) {
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+  :focus-visible { outline: 2px solid #f5ebd8; outline-offset: 4px; }
+
+  .scene { width: 100%; height: 100vh; height: 100dvh; min-height: 0; transform: none; transition: opacity .3s ease; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; }
+  .scene.active { transform: none; }
+  .scene picture { position: fixed; inset: 0; pointer-events: none; }
+  .scene-image { object-fit: cover; object-position: center; }
+  .scene::after { content: ''; pointer-events: none; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(20,12,5,.16), transparent 39%, rgba(18,10,5,.14)); }
+
+  /* Each label stays on its own arch, even on narrower phones. */
+  #lobby .sign { min-width: 0; padding: 9px 2px; width: 29%; top: 33% !important; text-shadow: 0 1px 5px #1c1006, 0 2px 8px #1c1006; }
+  #lobby .sign-left { left: 3% !important; transform: rotate(8deg) !important; }
+  #lobby .sign-center { left: 50% !important; transform: translateX(-50%) !important; }
+  #lobby .sign-right { right: 3% !important; transform: rotate(-8deg) !important; }
+  #lobby .sign-left:hover, #lobby .sign-left:focus-visible { transform: rotate(8deg) scale(1.04) !important; }
+  #lobby .sign-center:hover, #lobby .sign-center:focus-visible { transform: translateX(-50%) scale(1.04) !important; }
+  #lobby .sign-right:hover, #lobby .sign-right:focus-visible { transform: rotate(-8deg) scale(1.04) !important; }
+  #lobby .sign-title { font-size: clamp(.68rem, 2.8vw, .9rem); letter-spacing: .07em; }
+  #lobby .sign-sub { font-size: clamp(.52rem, 2vw, .66rem); letter-spacing: 0; }
+
+  /* Compact welcome card leaves room for links on the desk below. */
+  #lobby .welcome-card { width: min(80vw, 330px) !important; top: 54% !important; padding: 14px 18px !important; animation: none; }
+  #lobby .welcome-eyebrow { font-size: .7rem; letter-spacing: 3px; margin-bottom: 5px; }
+  #lobby .welcome-title { font-size: 1.55rem !important; letter-spacing: .02em; margin-bottom: 5px; }
+  #lobby .welcome-body { font-size: .83rem !important; line-height: 1.2; margin-bottom: 6px; }
+  #lobby .welcome-foot { font-size: .6rem; letter-spacing: 2px; }
+
+  .mobile-link-shelf { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); position: absolute; bottom: max(15px, env(safe-area-inset-bottom)); left: 3%; right: 3%; align-items: end; gap: 8px; z-index: 11; }
+  .linkedin-calling-card { display: block; width: 100%; max-width: 170px; transform: rotate(2deg); text-decoration: none; }
+  .linkedin-calling-card img { display: block; width: 100%; height: auto; filter: drop-shadow(0 5px 11px rgba(0,0,0,.48)); }
+  .linkedin-calling-card:hover, .linkedin-calling-card:focus-visible { transform: rotate(1deg) translateY(-3px); }
+
+  .code-vault-wrap { min-width: 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; }
+  .code-vault-link { display: block; width: clamp(100px, 31vw, 150px); line-height: 0; border: none; background: none; }
+  .code-vault-link img { width: 100%; height: auto; display: block; filter: drop-shadow(1px 0 #f5ebd8) drop-shadow(-1px 0 #f5ebd8) drop-shadow(0 1px #f5ebd8) drop-shadow(0 -1px #f5ebd8) drop-shadow(0 0 9px rgba(245,235,216,.4)); transition: transform .25s ease; }
+  .code-vault-link:hover img, .code-vault-link:focus-visible img { transform: scale(1.045); }
+  .vault-heading { color: #f5ebd8; font: 600 1rem/1.05 'Cormorant Garamond',serif; letter-spacing: .04em; text-shadow: 0 2px 5px #180d05; }
+  .vault-subtitle { color: #f5ebd8; font: .73rem/1.2 Arial,sans-serif; text-shadow: 0 2px 6px #180d05; text-decoration: underline; text-underline-offset: 2px; max-width: 165px; }
+
+  /* Room headings no longer collide with the back-to-lobby control. */
+  .room-title { top: 73px !important; left: 50%; width: 86%; }
+  .room-title h2 { font-size: clamp(1.5rem,6vw,1.95rem); letter-spacing: .08em; margin-bottom: 3px; }
+  .room-title p { font-size: .8rem; letter-spacing: .08em; }
+  .back-button { top: max(16px, env(safe-area-inset-top)) !important; left: 15px !important; padding: 10px 14px !important; font-size: .85rem !important; letter-spacing: .04em; }
+
+  /* Tap a physical card to open a scrollable, independent parchment panel. */
+  .study-cards:not(.atrium-grid), .atrium-grid { position: relative; top: auto; left: auto; transform: none; margin: clamp(200px, 33dvh, 320px) auto 28px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; grid-template-rows: repeat(2, auto) !important; gap: 12px; width: min(90vw, 365px); }
+  .study-card { min-height: 99px; padding: 10px !important; border-radius: 6px; }
+  .study-card-preview .card-eyebrow { font-size: .66rem; margin-bottom: 3px; }
+  .study-card-preview .card-title { font-size: 1.3rem; }
+  .study-card-preview .card-teaser { font-size: .76rem; }
+  .atrium-grid .study-card:nth-child(1) { grid-column: 1 / 3; width: 65%; }
+  .atrium-grid .study-card:nth-child(2) { grid-column: 1; grid-row: 2; }
+  .atrium-grid .study-card:nth-child(3) { grid-column: 2; grid-row: 2; }
+
+  .mobile-panel-backdrop:not([hidden]) { display: block; position: fixed; inset: 0; background: rgba(15,9,4,.65); z-index: 90; }
+  .mobile-panel:not([hidden]) { display: block; position: fixed; inset: 14px 11px; inset-block-start: max(14px, env(safe-area-inset-top)); inset-block-end: max(14px, env(safe-area-inset-bottom)); background: #f0e2c3; color: #392a1f; border: 1.5px solid #be9659; border-radius: 6px; box-shadow: 0 12px 40px rgba(0,0,0,.6); z-index: 91; overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 24px 20px 35px; }
+  .mobile-panel-header { display: flex; justify-content: space-between; align-items: start; gap: 16px; margin-bottom: 24px; }
+  .mobile-panel-section { font: .77rem/1.4 Arial,sans-serif; color: #746652; letter-spacing: .04em; text-transform: uppercase; }
+  .mobile-panel-close { background: none; border: none; padding: 0 3px; width: 44px; height: 44px; margin: -11px -8px 0 0; color: #33251c; cursor: pointer; font: 1.85rem/1 'Cormorant Garamond',serif; }
+  .mobile-panel-content > .card-eyebrow { display: none; }
+  .mobile-panel-content > .card-title { font: 500 clamp(2.2rem,10vw,2.85rem)/1.05 'Cormorant Garamond',serif; border-bottom: 1px solid #d5b784; margin-bottom: 22px; padding-bottom: 24px; color: #32251d; letter-spacing: 0; }
+  .mobile-panel-content .entry { margin-bottom: 28px; padding-bottom: 24px; }
+  .mobile-panel-content .entry-head { display: block; }
+  .mobile-panel-content .entry-head h4 { font: 500 1.7rem/1.1 'Cormorant Garamond',serif; margin-bottom: 10px; }
+  .mobile-panel-content .entry-date, .mobile-panel-content .entry-sub { display: block; font: .9rem/1.45 Arial,sans-serif; color: #675947; margin: 0 0 3px; }
+  .mobile-panel-content .entry-detail { margin-top: 13px; font: 1.05rem/1.5 Arial,sans-serif; color: #382c22; }
+  .mobile-panel-content .entry ul { padding-left: 0; margin: 16px 0 0 22px; }
+  .mobile-panel-content .entry ul li { font: 1rem/1.6 Arial,sans-serif; color: #392a1f; margin: 0 0 12px; }
+  .mobile-panel-content .skills-group { margin: 0 0 30px; }
+  .mobile-panel-content .skills-group h4 { font: 500 1.65rem/1.2 'Cormorant Garamond',serif; margin-bottom: 14px; }
+  .mobile-panel-content .skills-group p { font: 1.04rem/1.55 Arial,sans-serif; }
+  .mobile-panel-content .project-item summary { padding: 17px 0; }
+  .mobile-panel-content .project-item summary strong { font-size: 1.9rem; }
+  .mobile-panel-content .project-item summary small { font-size: .71rem; }
+  .mobile-panel-content .project-item summary span span { font: .97rem/1.35 Arial,sans-serif; }
+  .mobile-panel-content .project-item > p { font: .96rem/1.5 Arial,sans-serif; }
+  .mobile-panel-content .project-github-link { font: 600 .95rem/1.3 Arial,sans-serif; padding: 10px 12px; min-height: 44px; }
+
+  .letter { width: 91vw !important; padding: 22px 20px !important; top: 57% !important; max-height: min(72dvh, 675px) !important; border-radius: 6px; }
+  .letter-field input, .letter-field textarea { font-size: 16px; }
+}
+
+@media screen and (max-width: 768px) and (max-height: 680px) {
+  #lobby .welcome-card { top: 51% !important; padding: 10px 14px !important; }
+  #lobby .welcome-title { font-size: 1.35rem !important; }
+  #lobby .welcome-body { margin-bottom: 3px; }
+  .code-vault-link { width: 92px; }
+  .linkedin-calling-card { max-width: 155px; }
+  .vault-heading { font-size: .88rem; }
+  .vault-subtitle { font-size: .67rem; }
+  .study-cards:not(.atrium-grid), .atrium-grid { margin-top: clamp(155px, 29dvh, 250px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene, .study-card, .sign, .back-button { transition-duration: .01ms !important; animation: none !important; }
 }
 
 /* ============================================
@@ -623,243 +818,3 @@ body {
 .letter-status.success { color: #2e6d4f; }
 .letter-status.error   { color: #8a2e2e; }
 
-/* ============================================
-   MOBILE LAYOUT (≤768px)
-   ============================================ */
-
-@media (max-width: 768px) {
-
- /* MOBILE LOBBY SIGN POSITIONS — positioned on actual arches in the image */
-  .sign-left {
-    top: 34% !important;
-    left: 5% !important;
-    transform: rotate(8deg) !important;
-  }
-  .sign-left:hover {
-    transform: rotate(-25deg) translateY(-4px) scale(-10.05) !important;
-  }
-
-  .sign-center {
-    top: 35% !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-  }
-  .sign-center:hover {
-    transform: translateX(-50%) translateY(-4px) scale(1.05) !important;
-  }
-
-  .sign-right {
-    top: 34% !important;
-    right: 5% !important;
-    transform: rotate(-8deg) !important;
-  }
-  .sign-right:hover {
-    transform: rotate(25deg) translateY(-4px) scale(10.05) !important;
-  }
-
-  /* Smaller sign text on mobile */
-  .sign-left .sign-title,
-  .sign-right .sign-title {
-    font-size: 0.65rem;
-    letter-spacing: 1px;
-  }
-  .sign-left .sign-sub,
-  .sign-right .sign-sub {
-    font-size: 0.45rem;
-    letter-spacing: 0.5px;
-  }
-  .sign-center .sign-title {
-    font-size: 0.8rem;
-    letter-spacing: 1.5px;
-  }
-  .sign-center .sign-sub {
-    font-size: 0.55rem;
-  }
-
-  /* WELCOME CARD MOBILE */
-  .welcome-card {
-    width: 88vw !important;
-    padding: 28px 32px;
-    top: 50% !important;
-  }
-
-  .welcome-title {
-    font-size: 1.8rem !important;
-  }
-
-  .welcome-body {
-    font-size: 0.9rem;
-  }
-
-  /* ROOM TITLE MOBILE */
-  .room-title {
-    top: 4%;
-  }
-
-  .room-title h2 {
-    font-size: 1.4rem;
-    letter-spacing: 2px;
-  }
-
-  .room-title p {
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-  }
-
-  /* BACK BUTTON MOBILE */
-  .back-button {
-    top: 16px;
-    left: 16px;
-    font-size: 0.8rem;
-    padding: 8px 14px;
-  }
-
-  /* STUDY CARDS MOBILE (2x2 smaller) */
-  .study-cards:not(.atrium-grid) {
-    grid-template-columns: 145px 145px;
-    grid-template-rows: 95px 95px;
-    gap: 14px;
-  }
-
-  .study-card {
-    padding: 12px 14px;
-  }
-
-  .card-eyebrow {
-    font-size: 0.6rem;
-    letter-spacing: 3px;
-    margin-bottom: 4px;
-  }
-
-  .card-title {
-    font-size: 0.95rem;
-    margin-bottom: 4px;
-  }
-
-  .card-teaser {
-    font-size: 0.7rem;
-    line-height: 1.3;
-  }
-
-  /* ATRIUM CARDS MOBILE (triangle: 1 on top, 2 below) */
-  .atrium-grid {
-    grid-template-columns: 145px 145px !important;
-    grid-template-rows: 95px 95px !important;
-    gap: 14px;
-  }
-
-  .atrium-grid .study-card:nth-child(1) {
-    grid-column: 1 / 3;
-    justify-self: center;
-    width: 165px;
-  }
-
-  .atrium-grid .study-card:nth-child(2) {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-  .atrium-grid .study-card:nth-child(3) {
-    grid-column: 2;
-    grid-row: 2;
-  }
-
-  /* EXPANDED CARD MOBILE */
-  .study-card.expanded {
-    width: 92vw !important;
-    max-height: 88vh;
-    padding: 28px 24px;
-  }
-
-  .study-card.expanded .card-title {
-    font-size: 1.4rem;
-    margin-bottom: 14px;
-  }
-
-  .study-card.expanded .card-eyebrow {
-    font-size: 0.7rem;
-  }
-
-  .entry-head h4 {
-    font-size: 1rem;
-  }
-
-  .entry ul li,
-  .entry-detail,
-  .entry-sub {
-    font-size: 0.85rem;
-  }
-
-  /* LETTERS FORM MOBILE */
-  .letter {
-    width: 92vw !important;
-    padding: 28px 24px;
-    max-height: 78vh;
-  }
-
-  .letter-greeting {
-    font-size: 1.3rem;
-  }
-
-  .letter-field input,
-  .letter-field textarea {
-    font-size: 0.95rem;
-  }
-
-  .letter-field label {
-    font-size: 0.7rem;
-  }
-
-  .letter-footer {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .letter-signoff {
-    text-align: center;
-    font-size: 1.05rem;
-  }
-
-  .letter-send {
-    font-size: 0.9rem;
-    padding: 12px 20px;
-  }
-
-
-  /* Move back button higher up so it doesn't collide with room title */
-  .back-button {
-    top: 70px !important;
-    left: 12px !important;
-    font-size: 0.7rem !important;
-    padding: 6px 10px !important;
-  }
-
-  /* Move room title down a tiny bit so back button has room above it */
-  .room-title {
-    top: 8% !important;
-  }
-
-  /* Move welcome card up so it doesn't hide signs */
-  .welcome-card {
-    top: 70% !important;
-    padding: 20px 24px !important;
-  }
-
-  .welcome-title {
-    font-size: 1.5rem !important;
-    margin-bottom: 12px;
-  }
-
-  .welcome-body {
-    font-size: 0.85rem !important;
-    margin-bottom: 14px;
-  }
-
-  /* Tighter Letters form on mobile so it fits the screen */
-  .letter {
-    max-height: 75vh !important;
-    padding: 24px 22px !important;
-    top: 52% !important;
-  }
-}
