@@ -9,14 +9,22 @@ const backButtons = document.querySelectorAll('.back-button');
 
 // Function to switch to a different scene
 function goToScene(sceneId) {
+  closeDetailPanel();
   scenes.forEach(scene => {
     if (scene.id === sceneId) {
       scene.classList.add('active');
+      scene.removeAttribute('inert');
     } else {
       scene.classList.remove('active');
+      scene.setAttribute('inert', '');
     }
   });
 }
+
+// Inactive scenes should not receive keyboard focus.
+scenes.forEach(scene => {
+  if (!scene.classList.contains('active')) scene.setAttribute('inert', '');
+});
 
 // When a sign is clicked, go to that room
 signs.forEach(sign => {
@@ -33,41 +41,87 @@ backButtons.forEach(button => {
   });
 });
 
-// STUDY CARDS — expand on click, close on backdrop click
+// Study and Atrium cards open one independent detail dialog on every screen.
+// This avoids stacking and scrolling bugs caused by expanding cards in-place.
 const studyCards = document.querySelectorAll('.study-card');
-const studyBackdrop = document.querySelector('.study-backdrop');
+const detailPanel = document.querySelector('.mobile-panel');
+const detailBackdrop = document.querySelector('.mobile-panel-backdrop');
+const detailPanelContent = document.querySelector('.mobile-panel-content');
+const detailPanelSection = document.querySelector('.mobile-panel-section');
+const detailPanelClose = document.querySelector('.mobile-panel-close');
+let panelTrigger = null;
+
+function isMobileLayout() {
+  return window.matchMedia('(max-width: 768px)').matches;
+}
+
+function openDetailPanel(card) {
+  const full = card.querySelector('.study-card-full');
+  const section = card.closest('.scene');
+  const sectionName = section.id === 'atrium' ? 'THE ATRIUM' : 'THE STUDY';
+  const previewName = card.querySelector('.study-card-preview .card-title').textContent.trim();
+
+  panelTrigger = card;
+  detailPanelSection.textContent = `${sectionName} · ${previewName}`;
+  detailPanelContent.innerHTML = full.innerHTML;
+  const heading = detailPanelContent.querySelector('.card-title');
+  if (heading) heading.id = 'mobile-panel-title';
+  detailPanel.hidden = false;
+  detailBackdrop.hidden = false;
+  detailPanel.scrollTop = 0;
+  detailPanel.focus();
+}
+
+function closeDetailPanel() {
+  if (!detailPanel || detailPanel.hidden) return;
+  detailPanel.hidden = true;
+  detailBackdrop.hidden = true;
+  detailPanelContent.innerHTML = '';
+  if (panelTrigger && panelTrigger.closest('.scene.active')) panelTrigger.focus();
+  panelTrigger = null;
+}
+
+detailPanelClose.addEventListener('click', closeDetailPanel);
+detailBackdrop.addEventListener('click', closeDetailPanel);
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    closeDetailPanel();
+  }
+  // The overlay is a dialog: keep keyboard focus inside it while open.
+  if (event.key === 'Tab' && !detailPanel.hidden) {
+    const focusable = Array.from(detailPanel.querySelectorAll('a[href], button:not([disabled]), summary, input, textarea')).filter(el => el.getClientRects().length);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && (document.activeElement === first || document.activeElement === detailPanel)) {
+      event.preventDefault(); last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault(); first.focus();
+    }
+  }
+});
 
 studyCards.forEach(card => {
-  card.addEventListener('click', () => {
-    // If already expanded, do nothing (close button handles it)
-    if (card.classList.contains('expanded')) return;
-
-    // Add close button if it doesn't exist
-    if (!card.querySelector('.card-close')) {
-      const closeBtn = document.createElement('button');
-      closeBtn.className = 'card-close';
-      closeBtn.textContent = '×';
-      closeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        closeCard(card);
-      });
-      card.appendChild(closeBtn);
+  // Existing div cards behave as accessible buttons on both layouts.
+  card.setAttribute('role', 'button');
+  card.setAttribute('tabindex', '0');
+  card.setAttribute('aria-label', `Open ${card.querySelector('.study-card-preview .card-title').textContent.trim()}`);
+  card.addEventListener('keydown', (event) => {
+    if ((event.key === 'Enter' || event.key === ' ') && event.target === card) {
+      event.preventDefault(); card.click();
     }
-
-    card.classList.add('expanded');
-    studyBackdrop.classList.add('active');
   });
+  card.addEventListener('click', () => openDetailPanel(card));
 });
 
-studyBackdrop.addEventListener('click', () => {
-  const expandedCard = document.querySelector('.study-card.expanded');
-  if (expandedCard) closeCard(expandedCard);
+let lastMobileLayout = isMobileLayout();
+window.addEventListener('resize', () => {
+  const nowMobile = isMobileLayout();
+  if (nowMobile !== lastMobileLayout) {
+    closeDetailPanel();
+    lastMobileLayout = nowMobile;
+  }
 });
-
-function closeCard(card) {
-  card.classList.remove('expanded');
-  studyBackdrop.classList.remove('active');
-}
 
 
 // LETTERS FORM — submit via fetch so we don't leave the page
@@ -109,49 +163,3 @@ if (letterForm) {
   });
 }
 
-// MOBILE LOBBY CAROUSEL
-const carouselTrack = document.querySelector('.carousel-track');
-const dots = document.querySelectorAll('.carousel-dots .dot');
-const carouselSlides = document.querySelectorAll('.carousel-slide');
-
-let currentSlide = 0;
-let touchStartX = 0;
-let touchEndX = 0;
-
-function goToSlide(index) {
-  if (!carouselTrack) return;
-  currentSlide = Math.max(0, Math.min(2, index));
-  carouselTrack.style.transform = `translateX(-${currentSlide * 33.333}%)`;
-  dots.forEach((dot, i) => {
-    dot.classList.toggle('active', i === currentSlide);
-  });
-}
-
-// Dot click navigation
-dots.forEach((dot, i) => {
-  dot.addEventListener('click', () => goToSlide(i));
-});
-
-// Swipe detection on the carousel
-if (carouselTrack) {
-  carouselTrack.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-  }, { passive: true });
-
-  carouselTrack.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    const diff = touchStartX - touchEndX;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) goToSlide(currentSlide + 1); // swipe left → next
-      else goToSlide(currentSlide - 1); // swipe right → previous
-    }
-  }, { passive: true });
-}
-
-// Mobile signs trigger same room navigation as desktop signs
-document.querySelectorAll('.mobile-sign').forEach(sign => {
-  sign.addEventListener('click', () => {
-    const room = sign.dataset.room;
-    goToScene(room);
-  });
-});

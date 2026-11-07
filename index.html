@@ -6,44 +6,8 @@
   <title>Lamia's Library</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <style>
-  /* Figma mobile prototype — hidden on desktop */
-  #figma-mobile {
-    display: none;
-  }
-
-  /* Show Figma prototype on phones */
-  @media screen and (max-width: 768px) {
-    #figma-mobile {
-      display: block;
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      z-index: 99999;
-      background: #21170f;
-    }
-
-    #figma-mobile iframe {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-  }
-</style>
 </head>
 <body>
-  <!-- Interactive Figma mobile experience -->
-<div id="figma-mobile">
-  <iframe
-    title="Lamia's Library Mobile Experience"
-    src="https://embed.figma.com/proto/P7y0m7l4iO8Gg4THMHe5Ly/Untitled?node-id=3-2729&amp;p=f&amp;scaling=min-zoom&amp;content-scaling=fixed&amp;page-id=0%3A1&amp;starting-point-node-id=3%3A2729&amp;embed-host=share"
-    allowfullscreen>
-  </iframe>
-</div>
-
  <!-- LOBBY SCENE -->
 <div class="scene active" id="lobby">
   <picture>
@@ -74,6 +38,20 @@
       <p class="welcome-foot">est. 2026</p>
     </div>
   </div>
+
+  <!-- Shared GitHub and LinkedIn links, placed responsively in the lobby. -->
+  <div class="mobile-link-shelf" aria-label="Find Lamia online">
+    <a class="linkedin-calling-card" href="https://www.linkedin.com/in/lamia-hsn/" target="_blank" rel="noopener noreferrer" aria-label="Connect with Lamia Hasan on LinkedIn">
+      <img src="images/linkedin-calling-card.png" alt="Lamia Hasan — Connect with me on LinkedIn" loading="lazy">
+    </a>
+    <div class="code-vault-wrap">
+      <a class="code-vault-link" href="https://github.com/lamicodes" target="_blank" rel="noopener noreferrer" aria-label="View Lamia's code vault on GitHub">
+        <img src="images/code-vault-portal.png" alt="An illuminated antique book opening into a library" loading="lazy">
+      </a>
+      <span class="vault-heading">THE CODE VAULT</span>
+      <a class="vault-subtitle" href="https://github.com/lamicodes" target="_blank" rel="noopener noreferrer">Explore my projects on GitHub ↗</a>
+    </div>
+  </div>
 </div>
 
 <!-- THE STUDY -->
@@ -96,7 +74,7 @@
       <div class="study-card-preview">
         <p class="card-eyebrow">— work —</p>
         <h3 class="card-title">Experience</h3>
-        <p class="card-teaser">Library aide, teaching assistant, mentor</p>
+        <p class="card-teaser">Research, tutoring, and library work</p>
       </div>
       <div class="study-card-full">
         <p class="card-eyebrow">— work experience —</p>
@@ -104,14 +82,14 @@
 
         <div class="entry">
   <div class="entry-head">
-    <h4>JBMSHP CSE Tutor</h4>
+    <h4>Computer Science Tutor</h4>
     <span class="entry-date">May 2026 – Jul 2026</span>
   </div>
-  <p class="entry-sub">Joaquin Bustoz Math Science Honors Program · Arizona State University, Tempe, AZ</p>
+  <p class="entry-sub">Joaquin Bustoz Math-Science Honors Program · Arizona State University, Tempe, AZ</p>
   <ul>
-    <li>Tutored ASU undergraduates in Principles of Programming (CSE 110), supporting high-achieving high schoolers through college-level coursework</li>
-    <li>Taught 20–40 hrs/week across an intensive 7-week summer honors program serving underrepresented STEM students</li>
-    <li>Supported classroom management and instructor staff to maintain a productive learning environment</li>
+    <li>Tutored 13 students in ASU's CSE 110 (Principles of Programming), covering Java, object-oriented programming, encapsulation, polymorphism, arrays, and file I/O.</li>
+    <li>Conducted hands-on code reviews and real-time debugging sessions, helping students identify runtime errors, logical faults, and issues with program state.</li>
+    <li>Collaborated with instructional staff throughout an intensive seven-week summer program, supporting programming exercises and reinforcing problem-solving and code quality.</li>
   </ul>
 </div>
 
@@ -130,14 +108,14 @@
 
         <div class="entry">
           <div class="entry-head">
-            <h4>Teaching Assistant</h4>
-            <span class="entry-date">May 2023 – Dec 2023</span>
+            <h4>Undergraduate Research Volunteer — ViDScribe</h4>
+            <span class="entry-date">Sep 2026 – Present</span>
           </div>
-          <p class="entry-sub">Coaching Center · Dhaka, Bangladesh</p>
+          <p class="entry-sub">TEAL Lab · Arizona State University, Tempe, AZ</p>
           <ul>
-            <li>Tutored 100+ O Level Mathematics students, adapting to different learning styles</li>
-            <li>Assisted 20+ children in a Kumon-based program, monitoring progress and giving feedback</li>
-            <li>Led 50+ hours of office-hour support sessions on study strategies and learning challenges</li>
+            <li>Analyzed 10 narrated videos using Python, OpenAI Whisper, and FFmpeg, generating timestamped transcripts to investigate appropriate insertion points for accessible audio descriptions.</li>
+            <li>Evaluated 50 candidate audio-description placements using punctuation, acoustic pauses, and semantic cues, identifying sentence boundaries and longer pauses as more reliable insertion opportunities.</li>
+            <li>Explored video shot-boundary detection using PySceneDetect and DINOv2 embeddings, comparing hard cuts and gradual transitions to inform audio-description timing.</li>
           </ul>
         </div>
 
@@ -158,12 +136,12 @@
 
         <div class="entry">
           <div class="entry-head">
-            <h4>B.S.E. in Computer Science</h4>
-            <span class="entry-date">Jan 2024 – Jan 2028</span>
+            <h4>B.S.E. in Computer Science (Software Engineering)</h4>
+            <span class="entry-date">Expected Graduation: Fall 2027</span>
           </div>
           <p class="entry-sub">Arizona State University · Tempe, AZ</p>
           <p class="entry-detail"><strong>GPA:</strong> 3.96 / 4.00</p>
-          <p class="entry-detail"><strong>Coursework:</strong> Calculus & Statistics, Object-Oriented Programming, Data Structures and Algorithms, Digital Design</p>
+          <p class="entry-detail"><strong>Coursework:</strong> Calculus & Statistics, Object-Oriented Programming, Data Structures and Algorithms, Digital Design, Human-Computer Interaction, Operating Systems, Distributed Software Development, Probability and Statistics for Engineering Problem Solving, Applied Linear Algebra</p>
         </div>
       </div>
     </div>
@@ -181,12 +159,12 @@
 
         <div class="skills-group">
           <h4>Programming</h4>
-          <p>Python · C · C++ · Java · JUnit · SQL</p>
+          <p>Python · C · C++ · Java · C# · HTML · CSS · JavaScript · JUnit · SQL</p>
         </div>
 
         <div class="skills-group">
           <h4>Design & Productivity</h4>
-          <p>Notion · Microsoft Office · Google Docs · Canva · Sprint Backlog</p>
+          <p>Figma · Canva · Git · GitHub · Notion · Microsoft Office · Google Docs · Jira · Sprint Backlog</p>
         </div>
 
         <div class="skills-group">
@@ -202,36 +180,33 @@
       <div class="study-card-preview">
         <p class="card-eyebrow">— projects —</p>
         <h3 class="card-title">Built Things</h3>
-        <p class="card-teaser">A wearable, a factory floor, and a library</p>
+        <p class="card-teaser">Accessibility, software, and interactive design</p>
       </div>
       <div class="study-card-full">
         <p class="card-eyebrow">— projects —</p>
         <h3 class="card-title">What I've Built</h3>
 
-        <div class="entry">
-          <div class="entry-head">
-            <h4>360 Hat</h4>
-            <span class="entry-date">Mar 2024 – May 2024</span>
-          </div>
-          <p class="entry-sub">A wearable spatial-awareness device</p>
-          <ul>
-            <li>Uses 4 ultrasonic sensors and a gyro sensor for real-time object tracking</li>
-            <li>Detects up to 400 cm and classifies movement into 3 speed tiers, triggering feedback</li>
-            <li>Compact design integrating vibration motors and headphones</li>
-          </ul>
-        </div>
-
-        <div class="entry">
-          <div class="entry-head">
-            <h4>Assembly Line Operations</h4>
-            <span class="entry-date">Feb 2023 – Mar 2023</span>
-          </div>
-          <p class="entry-sub">LEGO Builders Inc. · Production design project</p>
-          <ul>
-            <li>Designed a hybrid race car-SUV, optimizing production to minimize cost by 15%</li>
-            <li>Achieved 87.5% efficiency with 5,080 units/month output</li>
-            <li>Projected $2.71M net profit by May of year one</li>
-          </ul>
+        <div class="project-list">
+          <details class="project-item">
+            <summary><span><strong>360 Hat</strong><small>MAR–MAY 2024 · WEARABLE</small><span>Directional sensing and feedback.</span></span></summary>
+            <p>A wearable spatial-awareness prototype using ultrasonic sensing, vibration, and audio feedback to help blind and low-vision users detect nearby obstacles.</p>
+            <a class="project-github-link" href="https://github.com/lamicodes/360Hat-Obstacle-Detection-System" target="_blank" rel="noopener noreferrer">View 360 Hat on GitHub ↗</a>
+          </details>
+          <details class="project-item">
+            <summary><span><strong>Distributed Web Services App</strong><small>DISTRIBUTED SYSTEMS</small><span>Service-backed web and desktop clients.</span></span></summary>
+            <p>Implemented service-based functionality across web and desktop clients as part of distributed software development coursework.</p>
+            <a class="project-github-link" href="https://github.com/lamicodes/Distributed-Web-Services-App" target="_blank" rel="noopener noreferrer">View Distributed Web Services App on GitHub ↗</a>
+          </details>
+          <details class="project-item">
+            <summary><span><strong>Student Discussion Application</strong><small>DESKTOP APPLICATION</small><span>Threaded discussions and reading status.</span></span></summary>
+            <p>Collaborated in a six-person Scrum team on a Java/JavaFX discussion application, developing CRUD features and JUnit tests with Git and Jira.</p>
+            <a class="project-github-link" href="https://github.com/lamicodes/Student-Discussion-Application" target="_blank" rel="noopener noreferrer">View Student Discussion Application on GitHub ↗</a>
+          </details>
+          <details class="project-item">
+            <summary><span><strong>Lamia's Library</strong><small>INTERACTIVE PORTFOLIO WEBSITE</small><span>An illustrated, room-based personal portfolio.</span></span></summary>
+            <p>Designed the mobile layout in Figma, then translated the room-based experience into responsive HTML, CSS, and JavaScript.</p>
+            <a class="project-github-link" href="https://github.com/lamicodes/lamias-library" target="_blank" rel="noopener noreferrer">View Lamia's Library on GitHub ↗</a>
+          </details>
         </div>
       </div>
     </div>
@@ -361,7 +336,7 @@
 <!-- THE LETTERS -->
 <div class="scene" id="letters">
   <picture>
-  <source media="(max-width: 768px)" srcset="images/letters-mobile.png">
+  <source media="(max-width: 768px)" srcset="images/letters-mobilepng.png">
   <img src="images/letters.png" alt="The Letters" class="scene-image">
 </picture>
   <div class="room-title">
@@ -407,7 +382,15 @@
   </form>
 </div>
 
-  <div class="study-backdrop"></div>
+  <!-- Shared detail panels live outside transformed scenes so scrolling and links work on every screen. -->
+  <div class="mobile-panel-backdrop" hidden></div>
+  <section class="mobile-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-panel-title" tabindex="-1" hidden>
+    <div class="mobile-panel-header">
+      <span class="mobile-panel-section"></span>
+      <button type="button" class="mobile-panel-close" aria-label="Close panel">×</button>
+    </div>
+    <div class="mobile-panel-content"></div>
+  </section>
 
   <script src="script.js"></script>
 </body>
