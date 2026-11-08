@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lamia's Library</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20261107-speed">
 </head>
 <body>
  <!-- LOBBY SCENE -->
 <div class="scene active" id="lobby">
   <picture>
-    <source media="(max-width: 768px)" srcset="images/lobby-mobile.png">
-    <img src="images/lobby.png" alt="Library lobby" class="scene-image">
+    <source media="(max-width: 768px)" srcset="images/lobby-mobile.webp">
+    <img src="images/lobby.webp" alt="Library lobby" class="scene-image" fetchpriority="high" decoding="async">
   </picture>
 
   <button class="sign sign-left" data-room="atrium">
@@ -42,11 +42,11 @@
   <!-- Shared GitHub and LinkedIn links, placed responsively in the lobby. -->
   <div class="mobile-link-shelf" aria-label="Find Lamia online">
     <a class="linkedin-calling-card" href="https://www.linkedin.com/in/lamia-hsn/" target="_blank" rel="noopener noreferrer" aria-label="Connect with Lamia Hasan on LinkedIn">
-      <img src="images/linkedin-calling-card.png" alt="Lamia Hasan — Connect with me on LinkedIn" loading="lazy">
+      <img src="images/linkedin-calling-card.webp" alt="Lamia Hasan — Connect with me on LinkedIn" loading="lazy" decoding="async">
     </a>
     <div class="code-vault-wrap">
       <a class="code-vault-link" href="https://github.com/lamicodes" target="_blank" rel="noopener noreferrer" aria-label="View Lamia's code vault on GitHub">
-        <img src="images/code-vault-portal.png" alt="An illuminated antique book opening into a library" loading="lazy">
+        <img src="images/code-vault-portal.webp" alt="An illuminated antique book opening into a library" loading="lazy" decoding="async">
       </a>
       <span class="vault-heading">THE CODE VAULT</span>
       <a class="vault-subtitle" href="https://github.com/lamicodes" target="_blank" rel="noopener noreferrer">Explore my projects on GitHub ↗</a>
@@ -57,8 +57,8 @@
 <!-- THE STUDY -->
 <div class="scene" id="study">
   <picture>
-  <source media="(max-width: 768px)" srcset="images/study-mobile.png">
-  <img src="images/study.png" alt="The Study" class="scene-image">
+  <source media="(max-width: 768px)" data-srcset="images/study-mobile.webp">
+  <img data-src="images/study.webp" alt="The Study" class="scene-image" decoding="async">
 </picture>
   <div class="room-title">
     <h2>The Study</h2>
@@ -217,8 +217,8 @@
   <!-- THE ATRIUM -->
 <div class="scene" id="atrium">
  <picture>
-  <source media="(max-width: 768px)" srcset="images/atrium-mobile.png">
-  <img src="images/atrium.png" alt="The Atrium" class="scene-image">
+  <source media="(max-width: 768px)" data-srcset="images/atrium-mobile.webp">
+  <img data-src="images/atrium.webp" alt="The Atrium" class="scene-image" decoding="async">
 </picture>
   <div class="room-title">
     <h2>The Atrium</h2>
@@ -336,8 +336,8 @@
 <!-- THE LETTERS -->
 <div class="scene" id="letters">
   <picture>
-  <source media="(max-width: 768px)" srcset="images/letters-mobilepng.png">
-  <img src="images/letters.png" alt="The Letters" class="scene-image">
+  <source media="(max-width: 768px)" data-srcset="images/letters-mobilepng.webp">
+  <img data-src="images/letters.webp" alt="The Letters" class="scene-image" decoding="async">
 </picture>
   <div class="room-title">
     <h2>The Letters</h2>
@@ -392,6 +392,6 @@
     <div class="mobile-panel-content"></div>
   </section>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=20261107-speed"></script>
 </body>
 </html>
