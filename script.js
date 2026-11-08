@@ -10,6 +10,21 @@ const backButtons = document.querySelectorAll('.back-button');
 // Function to switch to a different scene
 function goToScene(sceneId) {
   closeDetailPanel();
+  const nextScene = document.getElementById(sceneId);
+  // Only the lobby art loads at startup. Request the next room's artwork
+  // when a visitor actually chooses it, avoiding multiple large downloads.
+  if (nextScene) {
+    const source = nextScene.querySelector('picture source[data-srcset]');
+    const image = nextScene.querySelector('img.scene-image[data-src]');
+    if (source) {
+      source.srcset = source.dataset.srcset;
+      source.removeAttribute('data-srcset');
+    }
+    if (image) {
+      image.src = image.dataset.src;
+      image.removeAttribute('data-src');
+    }
+  }
   scenes.forEach(scene => {
     if (scene.id === sceneId) {
       scene.classList.add('active');
@@ -64,10 +79,15 @@ function openDetailPanel(card) {
   panelTrigger = card;
   detailPanelSection.textContent = `${sectionName} · ${previewName}`;
   detailPanelContent.innerHTML = full.innerHTML;
+  // Repository links should be visible immediately, without another click.
+  if (card.dataset.card === 'projects') {
+    detailPanelContent.querySelectorAll('.project-item').forEach(item => { item.open = true; });
+  }
   const heading = detailPanelContent.querySelector('.card-title');
   if (heading) heading.id = 'mobile-panel-title';
   detailPanel.hidden = false;
   detailBackdrop.hidden = false;
+  document.body.classList.add('dialog-open');
   detailPanel.scrollTop = 0;
   detailPanel.focus();
 }
@@ -76,6 +96,7 @@ function closeDetailPanel() {
   if (!detailPanel || detailPanel.hidden) return;
   detailPanel.hidden = true;
   detailBackdrop.hidden = true;
+  document.body.classList.remove('dialog-open');
   detailPanelContent.innerHTML = '';
   if (panelTrigger && panelTrigger.closest('.scene.active')) panelTrigger.focus();
   panelTrigger = null;
@@ -111,7 +132,10 @@ studyCards.forEach(card => {
       event.preventDefault(); card.click();
     }
   });
-  card.addEventListener('click', () => openDetailPanel(card));
+  card.addEventListener('click', (event) => {
+    if (event.target.closest('a, button, summary')) return;
+    openDetailPanel(card);
+  });
 });
 
 let lastMobileLayout = isMobileLayout();
