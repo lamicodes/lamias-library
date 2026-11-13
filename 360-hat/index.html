@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>360° Hat · Lamia Hasan</title>
+<meta name="description" content="Accessibility case study by Lamia Hasan: the 360° Hat, a wearable that warns blind and low-vision users about obstacles with vibration and spoken alerts.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=Schibsted+Grotesk:wght@600;700;800&display=swap">
+<meta property="og:title" content="360° Hat · Accessibility case study by Lamia Hasan">
+<meta property="og:description" content="Designing haptic feedback for a wearable obstacle-detection hat: direction by location, urgency by pulse count, voice for the worst case.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://lamiahasan.com/360-hat/">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>
+/* Layout: one reading column on a notebook dot-grid ground, widening to full-bleed rows for before/after sketches. Section labels carry date, stage and whose work it was. */
+:root {
+  --paper: #f5f7f5;
+  --surface: #ffffff;
+  --ink: #18212d;
+  --muted: #586372;
+  --rule: #dce1e2;
+  --dot: #cdd4d4;
+  --accent: #0d766e;
+  --accent-soft: #e0f1ee;
+  --diet: #2d7f3a;
+  --fits: #2259a8;
+  --tight: #b83a26;
+  --walk: #8b97a6;
+  --canvas: #1e1e1e;
+  --canvas-text: #c9ced4;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #12161b; --surface: #1a2027; --ink: #e6e9ed; --muted: #9ba5b2; --rule: #2b333c; --dot: #252c34;
+    --accent: #45c2b1; --accent-soft: #163330; --diet: #6fc27c; --fits: #7ea9ee; --tight: #f08a74; --walk: #6c7888;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #12161b; --surface: #1a2027; --ink: #e6e9ed; --muted: #9ba5b2; --rule: #2b333c; --dot: #252c34;
+  --accent: #45c2b1; --accent-soft: #163330; --diet: #6fc27c; --fits: #7ea9ee; --tight: #f08a74; --walk: #6c7888;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.col { max-width: 68ch; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+.mono { font-family: var(--f-mono); }
+.label {
+  font-family: var(--f-mono); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted);
+}
+
+/* Hero */
+.hero {
+  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.3px);
+  background-size: 22px 22px;
+  border-bottom: 1px solid var(--rule);
+}
+.hero .wrap { padding-block: 64px 56px; display: grid; gap: 40px; }
+.hero h1 { font-size: clamp(2.4rem, 6vw, 4.1rem); font-weight: 800; line-height: 1.02; letter-spacing: -0.025em; }
+.lede { font-size: 1.25rem; line-height: 1.5; max-width: 52ch; margin-top: 18px; }
+.status {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 22px;
+  font-family: var(--f-mono); font-size: 0.8rem; padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--accent); color: var(--accent); background: var(--surface);
+}
+.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.meta {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px 32px;
+  border-top: 1px solid var(--rule); padding-top: 24px;
+}
+.meta div { min-width: 0; }
+.meta p { margin-top: 4px; font-size: 0.98rem; }
+
+/* Time budget: the app's core idea, drawn to scale (30-minute break) */
+.budget { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 22px 22px 18px; }
+.budget h2 { font-size: 1.15rem; font-weight: 700; }
+.budget > p { color: var(--muted); font-size: 0.95rem; margin-top: 4px; }
+.brows { display: grid; gap: 16px; margin-top: 20px; }
+.brow { display: grid; grid-template-columns: 7.5rem 1fr; gap: 6px 16px; align-items: center; }
+.brow .name { font-weight: 700; font-size: 0.95rem; }
+.bar { display: flex; height: 30px; border-radius: 5px; overflow: hidden; border: 1px dashed var(--muted); }
+.seg { display: flex; align-items: center; justify-content: center; font-family: var(--f-mono); font-size: 0.75rem; white-space: nowrap; overflow: hidden; }
+.seg.walk { background: var(--walk); color: #fff; }
+.seg.wait { background: var(--ink); color: var(--paper); }
+.seg.spare { color: var(--muted); }
+.verdict { grid-column: 2; font-family: var(--f-mono); font-size: 0.82rem; font-weight: 500; }
+.verdict.fits { color: var(--fits); }
+.verdict.tight { color: var(--tight); }
+.scale { display: grid; grid-template-columns: 7.5rem 1fr; gap: 16px; margin-top: 8px; }
+.ticks { position: relative; height: 1.2rem; border-top: 1px solid var(--rule); }
+.ticks span { position: absolute; top: 3px; white-space: nowrap; transform: translateX(-50%); font-family: var(--f-mono); font-size: 0.7rem; color: var(--muted); }
+.ticks span:first-child { transform: none; }
+.ticks span:last-child { transform: translateX(-100%); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 14px; font-size: 0.82rem; color: var(--muted); }
+.key i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+
+/* Sections */
+section { padding-block: 64px 8px; }
+.shead { display: grid; gap: 10px; margin-bottom: 22px; }
+.shead .row { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.shead h2 { font-size: clamp(1.6rem, 3.2vw, 2.15rem); font-weight: 700; line-height: 1.15; }
+.who {
+  font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 4px; border: 1px solid var(--accent); white-space: nowrap;
+}
+.who.mine { background: var(--accent); color: var(--paper); }
+.who.team { color: var(--muted); border-color: var(--rule); background: var(--surface); }
+.who.part { color: var(--accent); background: var(--accent-soft); border-color: transparent; }
+.prose { display: grid; gap: 14px; }
+.prose ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+h3 { font-size: 1.15rem; font-weight: 700; }
+
+.evidence { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 22px; }
+.evidence div { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; font-size: 0.95rem; }
+.evidence b { display: block; font-family: var(--f-mono); font-weight: 500; font-size: 1.35rem; margin-bottom: 4px; color: var(--accent); }
+
+.twocol { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px 40px; margin-top: 8px; }
+.twocol > div { min-width: 0; display: grid; gap: 8px; align-content: start; }
+.callout { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; margin-top: 22px; max-width: 68ch; }
+
+.tasks { list-style: none; margin: 18px 0 0; padding: 0; border-top: 1px solid var(--rule); max-width: 760px; }
+.tasks li { display: grid; grid-template-columns: 2rem 1fr auto; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+.tasks .n { font-family: var(--f-mono); color: var(--muted); font-size: 0.85rem; }
+.tasks .pri { font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted); text-align: right; }
+.tasks .pri.req { color: var(--accent); font-weight: 500; }
+
+/* Figures */
+figure { margin: 0; }
+.frame { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 12px; display: flex; justify-content: center; align-items: center; }
+.frame img { display: block; width: auto; max-width: 100%; height: auto; max-height: 440px; border-radius: 3px; }
+figcaption { font-size: 0.88rem; color: var(--muted); margin-top: 8px; }
+.wide { margin-top: 26px; }
+.wide .frame img { max-height: 520px; }
+.strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 26px; }
+.strip .frame img { max-height: 280px; }
+.strip figcaption { font-family: var(--f-mono); font-size: 0.75rem; }
+
+.ba { display: grid; gap: 22px; margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--rule); }
+.ba:first-of-type { border-top: 0; padding-top: 0; }
+.ba-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; align-items: baseline; }
+.ba-head h3 { font-size: 1.3rem; }
+.ba-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.ba-pair figure { min-width: 0; display: grid; gap: 8px; align-content: start; }
+.ba-pair .label { color: var(--ink); }
+.ba-pair .after .label { color: var(--accent); }
+.ba-pair .after .frame { border-color: var(--accent); }
+.ba-notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px 32px; }
+.ba-notes > div { min-width: 0; }
+.ba-notes ul { margin: 6px 0 0; padding-left: 1.1em; display: grid; gap: 4px; font-size: 0.97rem; }
+.principle { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.principle span { font-size: 0.8rem; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--ink); }
+
+.swatches { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 30px; padding: 16px 18px; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; align-items: center; }
+.swatches p { flex: 1 1 260px; font-size: 0.95rem; }
+.sw { display: inline-flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-size: 0.8rem; }
+.sw i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+
+.screens { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 22px; }
+.screen { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: grid; gap: 6px; align-content: start; }
+.screen .id { font-family: var(--f-mono); font-size: 0.75rem; color: var(--accent); }
+.screen .shot { display: flex; justify-content: center; padding: 12px; margin-bottom: 6px; background: var(--paper); border-radius: 6px; }
+.screen .shot img { display: block; width: 100%; max-width: 200px; height: auto; border: 1px solid var(--rule); border-radius: 4px; }
+.screen h3 { font-size: 1.02rem; }
+.screen p { font-size: 0.92rem; color: var(--muted); }
+.flow { margin-top: 18px; font-family: var(--f-mono); font-size: 0.82rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+.flow span { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 3px 8px; color: var(--ink); }
+.links-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.linkbtn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 6px; border: 1px solid var(--accent); background: var(--accent); color: var(--paper); font-family: var(--f-mono); font-size: 0.85rem; font-weight: 500; text-decoration: none; }
+.linkbtn.ghost { background: var(--surface); color: var(--accent); }
+.linkbtn:hover { filter: brightness(1.08); }
+.linkbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.proto-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; padding: 10px 16px; border: 1px solid var(--accent); border-radius: 6px; background: var(--surface); color: var(--accent); font-weight: 700; text-decoration: none; }
+.proto-link:hover { background: var(--accent-soft); }
+.proto-link span { font-family: var(--f-mono); font-weight: 400; font-size: 0.8rem; color: var(--muted); }
+
+.tablewrap { overflow-x: auto; margin-top: 20px; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 0.93rem; }
+th, td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--rule); }
+th { font-family: var(--f-mono); font-weight: 500; font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td .mine-tag { font-family: var(--f-mono); font-size: 0.7rem; color: var(--accent); display: block; margin-top: 4px; }
+
+.compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-top: 22px; }
+.compare > div { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px 18px; display: grid; gap: 6px; align-content: start; }
+.compare h3 { font-size: 1.02rem; }
+.compare p { font-size: 0.94rem; }
+.example { font-family: var(--f-mono); font-size: 0.85rem; background: var(--accent-soft); padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
+
+.plan { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0; margin-top: 22px; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); overflow: hidden; }
+.plan > div { padding: 14px 16px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin: 0 -1px -1px 0; }
+.plan p { font-size: 0.93rem; margin-top: 4px; }
+
+.learned { display: grid; gap: 18px; margin-top: 8px; max-width: 72ch; counter-reset: l; }
+.learned div { display: grid; grid-template-columns: 2.2rem 1fr; gap: 4px 12px; }
+.learned div::before { counter-increment: l; content: counter(l); font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; color: var(--accent); line-height: 1.2; grid-row: span 2; }
+.learned h3 { font-size: 1.08rem; }
+
+footer { margin-top: 72px; border-top: 1px solid var(--rule); }
+footer .wrap { padding-block: 28px 40px; display: flex; flex-wrap: wrap; gap: 10px 28px; justify-content: space-between; font-size: 0.9rem; color: var(--muted); }
+footer .links { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+
+@media (max-width: 640px) {
+  .hero .wrap { padding-block: 44px 40px; }
+  .brow, .scale { grid-template-columns: 1fr; }
+  .scale > span { display: none; }
+  .verdict { grid-column: 1; }
+  .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ba-pair { grid-template-columns: 1fr; }
+  .tasks li { grid-template-columns: 1.6rem 1fr; }
+  .tasks .pri { grid-column: 2; text-align: left; }
+  section { padding-block: 48px 4px; }
+}
+#summary { padding-block: 40px 0; }
+.glance { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); overflow: hidden; }
+.glance > div { min-width: 0; padding: 18px 20px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin: 0 -1px -1px 0; display: grid; gap: 6px; align-content: start; }
+.glance p:not(.label) { font-size: 0.98rem; }
+.shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px 14px; margin-top: 24px; padding: 18px; background: var(--canvas); border-radius: 10px; }
+.shots figure { min-width: 0; display: grid; gap: 8px; align-content: start; }
+.shots img { display: block; width: 100%; height: auto; border-radius: 4px; }
+.shots figcaption { margin: 0; font-family: var(--f-mono); font-size: 0.72rem; color: var(--canvas-text); }
+.shots-note { font-size: 0.88rem; color: var(--muted); margin-top: 8px; }
+@media (max-width: 640px) { .shots { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 12px; } }
+.backlink { display: inline-flex; align-items: center; gap: 6px; font-family: var(--f-mono); font-size: 0.8rem; color: var(--muted); text-decoration: none; margin-bottom: 18px; }
+.backlink:hover { color: var(--accent); }
+@media print {
+  section { padding-block: 34px 0; }
+  .hero .wrap { padding-block: 32px 28px; gap: 28px; }
+  .shead, h2, h3, .ba-head { break-after: avoid; }
+  .ba, .budget, figure, .screen, .compare > div, .evidence, .glance, .tablewrap, .plan, .learned div, .tasks li, .twocol, .callout, .swatches, .links-row, .strip { break-inside: avoid; }
+  .frame img { max-height: 330px; }
+  .wide .frame img { max-height: 360px; }
+  .strip .frame img { max-height: 200px; }
+  .shots { grid-template-columns: repeat(11, minmax(0, 1fr)); gap: 10px 6px; padding: 10px; break-inside: avoid; align-items: start; }
+  .shots figcaption { font-size: 0.62rem; }
+  #walkthrough { break-inside: avoid; }
+  .ba { margin-top: 24px; padding-top: 18px; gap: 14px; }
+  #redesign { break-before: page; }
+  #next, #learned { padding-block: 24px 0; }
+  footer { margin-top: 20px; break-inside: avoid; }
+  footer .wrap { padding-block: 14px 0; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* 360 Hat additions */
+.pulses { position: relative; height: 30px; border: 1px dashed var(--muted); border-radius: 5px; overflow: hidden; }
+.pulses .p { position: absolute; top: 0; bottom: 0; width: 16.667%; background: var(--accent); }
+.verdict { color: var(--ink); }
+ul.plain { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; }
+.decisions { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 22px; }
+.decisions > div { min-width: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px 18px; display: grid; gap: 6px; align-content: start; }
+.decisions h3 { font-size: 1.05rem; }
+.decisions p:not(.label) { font-size: 0.95rem; }
+.note { font-size: 0.88rem; color: var(--muted); margin-top: 10px; max-width: 68ch; }
+.codefig { margin-top: 26px; max-width: 560px; }
+.codefig pre { margin: 8px 0 0; padding: 16px 18px; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; overflow-x: auto; font-family: var(--f-mono); font-size: 0.85rem; line-height: 1.6; color: var(--ink); }
+.codefig .k { color: var(--accent); font-weight: 500; }
+.codefig .c { color: var(--muted); }
+code { font-family: var(--f-mono); font-size: 0.88em; background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; }
+pre code { background: none; padding: 0; font-size: inherit; }
+.gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 26px; }
+.gallery figure { min-width: 0; }
+.gallery .span2 { grid-column: 1 / -1; }
+.gallery .frame { padding: 8px; }
+.gallery .frame img { width: 100%; aspect-ratio: 16 / 10; height: auto; object-fit: cover; }
+.gallery .span2 .frame img { aspect-ratio: 16 / 9; }
+@media (max-width: 640px) { .gallery { grid-template-columns: 1fr; } }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 18px; }
+.stats > div { min-width: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; }
+.stats b { display: block; font-family: var(--f-display); font-weight: 800; font-size: 1.7rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+.stats p { font-size: 0.93rem; margin-top: 2px; }
+.colchart { margin-top: 22px; max-width: 640px; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 20px 20px 14px; }
+.cbars { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 8px; height: 170px; align-items: end; border-bottom: 1px solid var(--rule); padding-bottom: 0; }
+.cb { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
+.cb .bar { display: block; width: 100%; max-width: 38px; background: var(--accent); border-radius: 3px 3px 0 0; }
+.cb.low .bar { background: var(--tight); }
+.cb .n { order: -1; font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted); margin-bottom: 4px; font-variant-numeric: tabular-nums; }
+.cb .x { position: absolute; bottom: -22px; font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted); }
+.colchart figcaption { margin-top: 30px; }
+.quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 22px; }
+.quotes blockquote { margin: 0; padding: 12px 16px; border-left: 3px solid var(--tight); background: var(--surface); border-radius: 0 8px 8px 0; font-size: 0.97rem; }
+@media print { .stats, .colchart, .quotes { break-inside: avoid; } }
+@media print { .gallery figure, .decisions > div, .codefig { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <a class="backlink" href="/">← Back to Lamia's Library</a>
+      <p class="label">Accessibility case study · Class project · Arizona State University</p>
+      <h1 style="margin-top:14px">360° Hat</h1>
+      <p class="lede">A wearable that warns blind and low-vision users about obstacles in every direction, using vibration around the head and spoken alerts.</p>
+      <span class="status">Completed · Spring 2024 · Working prototype</span>
+    </div>
+
+    <div class="meta">
+      <div><p class="label">My role</p><p>Haptic feedback: vibration motor control in Python and the mapping from danger level to vibration pattern</p></div>
+      <div><p class="label">Team</p><p>4 students. Labels on each section show which parts were my individual work.</p></div>
+      <div><p class="label">Timeline</p><p>March 2024 – May 2024</p></div>
+      <div><p class="label">Tools</p><p>Python, Raspberry Pi, RPi.GPIO, ultrasonic sensors, MPU-6050 gyroscope, vibration motors, espeak text-to-speech</p></div>
+    </div>
+
+    <div class="budget" aria-labelledby="pulse-title">
+      <h2 id="pulse-title">How urgency feels: count the pulses</h2>
+      <p>Each pulse is 0.25 s on and 0.25 s off. The motor on the side of the obstacle does the buzzing. Drawn to scale:</p>
+      <div class="brows">
+        <div class="brow">
+          <span class="name">Level 1</span>
+          <div class="pulses" role="img" aria-label="One pulse, half a second in total">
+            <span class="p on" style="left:0"></span>
+          </div>
+          <span class="verdict">1 pulse · slow approach or far away</span>
+        </div>
+        <div class="brow">
+          <span class="name">Level 2</span>
+          <div class="pulses" role="img" aria-label="Two pulses, one second in total">
+            <span class="p on" style="left:0"></span><span class="p on" style="left:33.333%"></span>
+          </div>
+          <span class="verdict">2 pulses · closer or approaching faster</span>
+        </div>
+        <div class="brow">
+          <span class="name">Level 3</span>
+          <div class="pulses" role="img" aria-label="Three pulses, one and a half seconds in total, then a spoken alert">
+            <span class="p on" style="left:0"></span><span class="p on" style="left:33.333%"></span><span class="p on" style="left:66.667%"></span>
+          </div>
+          <span class="verdict tight">3 pulses + spoken alert: “Behind you”</span>
+        </div>
+      </div>
+      <div class="scale" aria-hidden="true">
+        <span></span>
+        <div class="ticks"><span style="left:0">0</span><span style="left:33.333%">0.5</span><span style="left:66.667%">1.0</span><span style="left:100%">1.5 s</span></div>
+      </div>
+      <div class="key"><span><i style="background:var(--accent)"></i>Motor on (0.25 s)</span><span><i style="border:1px dashed var(--muted)"></i>Pause (0.25 s)</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="wrap" id="summary" aria-label="Project summary">
+    <div class="glance">
+      <div><p class="label">Problem</p><p>Obstacles coming from the side or from behind are easy to miss without sight. The team wanted to warn users in all four directions early enough to react.</p></div>
+      <div><p class="label">What I did</p><p>Built the vibration motor control and designed how urgency is felt: where the buzz is tells you the direction, how many pulses tells you how urgent it is, and voice is saved for the most urgent case.</p></div>
+      <div><p class="label">Outcome</p><p>10 students tested the first version: 9 of 10 rated the alerts clear, but telling which side buzzed was the weak spot, in my area. The team rebuilt the hat around that feedback.</p></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="problem">
+    <div class="shead">
+      <div class="row"><span class="label">March · Goal</span><span class="who team">Team</span></div>
+      <h2>Awareness in every direction, without looking</h2>
+    </div>
+    <div class="prose col">
+      <p>The 360° Hat helps users avoid both stationary and moving obstacles. It warns them about an impending collision based on two things: how close an object is and how fast it is approaching. The goal was to give users enough time to react and avoid contact, injuries and head-on collisions.</p>
+      <p>It was designed for blind and low-vision users, but anyone who wants more awareness of their surroundings without relying only on their eyes could use it.</p>
+    </div>
+  </section>
+
+  <section class="wrap" id="system">
+    <div class="shead">
+      <div class="row"><span class="label">March – April · System</span><span class="who team">Team</span></div>
+      <h2>Four sensors in, four motors and a voice out</h2>
+    </div>
+    <div class="twocol">
+      <div>
+        <h3>Inputs</h3>
+        <ul class="plain">
+          <li><b>4 ultrasonic sensors</b> facing front, back, left and right measure distance. Comparing two readings in a row gives the speed of an approaching object.</li>
+          <li><b>1 gyroscope</b> (MPU-6050) detects head turns and body turns, so the hat doesn't mistake the user's own movement for an approaching object.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Outputs</h3>
+        <ul class="plain">
+          <li><b>4 vibration motors</b>, one on each side of the head, are the main alerts.</li>
+          <li><b>Headphones</b> play a short spoken warning that names the direction, for the most dangerous cases only.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="callout">The sensors take turns, one at a time with a 0.25-second pause between each, so their pings don't interfere with each other. A Raspberry Pi runs one Python loop that reads each side, works out a danger level and triggers that side's feedback.</p>
+  </section>
+
+  <section class="wrap" id="feedback">
+    <div class="shead">
+      <div class="row"><span class="label">April · Feedback design</span><span class="who mine">My work</span></div>
+      <h2>Telling someone where and how urgent, without sight</h2>
+    </div>
+    <div class="prose col">
+      <p>My part was the haptic feedback: the code that drives the vibration motors and the rules for what each alert should feel like. The question I was designing for: how do you tell someone where an obstacle is and how urgent it is, without overwhelming them?</p>
+    </div>
+    <div class="decisions">
+      <div><p class="label">Direction</p><h3>The buzz points to the obstacle</h3><p>Each sensor is paired with the motor on the same side of the head. A buzz on the left means something on the left, with nothing to decode.</p></div>
+      <div><p class="label">Urgency</p><h3>Count, not strength</h3><p>Danger levels 1, 2 and 3 become 1, 2 and 3 pulses. A number of pulses is easier to tell apart through a hat than small differences in vibration strength.</p></div>
+      <div><p class="label">Voice</p><h3>Saved for the worst case</h3><p>Spoken alerts like “Behind you” and “On your left” only play at level 3. Kept rare, they stay meaningful instead of turning into background noise.</p></div>
+    </div>
+
+    <h3 style="margin-top:34px">The rules</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Level</th><th>Speed rule</th><th>Distance-only fallback</th><th>Feedback</th></tr></thead>
+        <tbody>
+          <tr><td><b>1</b></td><td>Slow approach (5–73 cm/s) within 200 cm</td><td>400–800 cm away</td><td>1 pulse</td></tr>
+          <tr><td><b>2</b></td><td>Medium approach (73–129 cm/s) between 200 and 400 cm</td><td>200–400 cm away</td><td>2 pulses</td></tr>
+          <tr><td><b>3</b></td><td>Fast approach (over 129 cm/s)</td><td>Closer than 200 cm</td><td>3 pulses + spoken alert</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Speed thresholds came from an in-class experiment. Alerts pause while the gyroscope reports a head turn or body turn.</p>
+
+    <figure class="codefig">
+      <figcaption class="label">The pulse function I wrote</figcaption>
+<pre><code><span class="k">def</span> VMbeep(vm, x):
+    <span class="k">while</span> x &gt; 0:
+        vmOn(vm)            <span class="c"># motor on</span>
+        time.sleep(.25)
+        vmOff(vm)           <span class="c"># motor off</span>
+        time.sleep(.25)
+        x -= 1</code></pre>
+    </figure>
+  </section>
+
+  <section class="wrap" id="testing">
+    <div class="shead">
+      <div class="row"><span class="label">April · Testing the first version</span><span class="who team">Team</span></div>
+      <h2>Ten students wore it and rated it</h2>
+    </div>
+    <div class="prose col">
+      <p>The first version put the electronics between two hats: an outer hat for the sensors and a second hat inside it. Ten fellow students wore it, tried it out, and rated it in a survey.</p>
+    </div>
+    <div class="stats">
+      <div><b>9 / 10</b><p>rated the alerts clear and understandable (6 or 7 out of 7)</p></div>
+      <div><b>8 / 10</b><p>rated the sensors accurate (6 or 7 out of 7)</p></div>
+      <div><b>8 / 10</b><p>felt warned ahead of time (4 or 5 out of 5)</p></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="findings">
+    <div class="shead">
+      <div class="row"><span class="label">April · What testing showed</span><span class="who mine">About my design</span></div>
+      <h2>Direction was the hardest part to feel</h2>
+    </div>
+    <div class="prose col">
+      <p>The survey asked how well testers could tell which side the vibration came from. This is the part of the hat I designed, and it had the widest spread of any question.</p>
+    </div>
+    <figure class="colchart" aria-labelledby="side-cap">
+      <div class="cbars" role="img" aria-label="Ratings for telling which side buzzed, from 1 to 10: one person each rated 4 and 5, two rated 6, two rated 8, three rated 9, and one rated 10. Nobody rated 1, 2, 3 or 7.">
+        <div class="cb"><span class="bar" style="height:0%"></span><span class="n">0</span><span class="x">1</span></div>
+        <div class="cb"><span class="bar" style="height:0%"></span><span class="n">0</span><span class="x">2</span></div>
+        <div class="cb"><span class="bar" style="height:0%"></span><span class="n">0</span><span class="x">3</span></div>
+        <div class="cb low"><span class="bar" style="height:33.333%"></span><span class="n">1</span><span class="x">4</span></div>
+        <div class="cb low"><span class="bar" style="height:33.333%"></span><span class="n">1</span><span class="x">5</span></div>
+        <div class="cb low"><span class="bar" style="height:66.667%"></span><span class="n">2</span><span class="x">6</span></div>
+        <div class="cb"><span class="bar" style="height:0%"></span><span class="n">0</span><span class="x">7</span></div>
+        <div class="cb"><span class="bar" style="height:66.667%"></span><span class="n">2</span><span class="x">8</span></div>
+        <div class="cb"><span class="bar" style="height:100%"></span><span class="n">3</span><span class="x">9</span></div>
+        <div class="cb"><span class="bar" style="height:33.333%"></span><span class="n">1</span><span class="x">10</span></div>
+      </div>
+      <figcaption id="side-cap">“How well could you tell which side you were feeling the vibration on?” Rated 1–10 by 10 testers. Median 8, but 4 of 10 rated it 6 or lower.</figcaption>
+    </figure>
+    <div class="quotes">
+      <blockquote>“It was difficult to determine which vibrators were going off.”</blockquote>
+      <blockquote>“Due to double hat I was not able to feel the buzzer properly.”</blockquote>
+      <blockquote>“Stronger vibrations on the side it is sensing.”</blockquote>
+    </div>
+    <div class="prose col" style="margin-top:26px">
+      <h3>What I took from it</h3>
+      <ul class="plain">
+        <li><b>Counting pulses only works if you can feel them.</b> Using pulse count for urgency held up, but the vibration had to reach the head clearly first.</li>
+        <li><b>The hardware muffled the haptics.</b> The second hat sat between the motors and the head and absorbed the buzz. Feedback design and physical design can't be separated.</li>
+        <li><b>Voice worked.</b> Testers called the audio clear and easy to follow.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="wrap" id="changes">
+    <div class="shead">
+      <div class="row"><span class="label">April – May · Changes</span><span class="who team">Team</span></div>
+      <h2>Rebuilding the hat around the feedback</h2>
+    </div>
+    <div class="prose col">
+      <p>The team turned the survey into a plan and rebuilt the hat for the final version.</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>What testers said</th><th>What we changed</th></tr></thead>
+        <tbody>
+          <tr><td>Hard to tell which side was buzzing; the double hat muffled it</td><td>Removed the second hat and put the vibration motors in fabric pocket straps against the head</td></tr>
+          <tr><td>“Instead of a second hat, using cushioning would be more effective”</td><td>Sewed a cloth lining inside the hat to hold the Raspberry Pi and breadboard</td></tr>
+          <tr><td>Comfortable, but “quite loose”</td><td>Added an adjustable chin strap</td></tr>
+          <tr><td>Visible wires; “very wearable, but not aesthetic”</td><td>Covered visible wires with feathers</td></tr>
+          <tr><td>“Volume should be loud”</td><td>Kept the volume as it was, on purpose: users who rely heavily on hearing could be startled or overwhelmed by louder alerts</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="wrap" id="build">
+    <div class="shead">
+      <div class="row"><span class="label">May · Final hat</span><span class="who team">Team</span></div>
+      <h2>The final hat</h2>
+    </div>
+    <div class="prose col">
+      <p>In the final version, the electronics sit in a black cloth lining so the Raspberry Pi and wires never touch the wearer's hair or scalp. The vibration motors sit in orange fabric pockets against the inner lining, invisible from outside. A zipper hides the headphones when they aren't needed, and the strap keeps the hat stable on any head size.</p>
+      <p>The feathers aren't just decoration. They also give the hat a texture that a blind user can recognize by touch, so it's easy to tell apart from other hats.</p>
+    </div>
+    <div class="gallery">
+      <figure class="span2"><div class="frame"><img src="img/hat-full.jpg" width="1400" height="787" alt="The finished 360° Hat: a straw hat with feather trim, ultrasonic sensors on the crown, earbuds and a chin strap."></div><figcaption>The finished hat</figcaption></figure>
+      <figure><div class="frame"><img src="img/hat-sensors.jpg" width="1400" height="1090" alt="Two ultrasonic sensors mounted on the side and front of the hat's crown."></div><figcaption>Ultrasonic sensors on the crown</figcaption></figure>
+      <figure><div class="frame"><img src="img/hat-motors.jpg" width="1400" height="787" alt="Inside of the hat: a black cloth lining with orange fabric pockets holding the vibration motors."></div><figcaption>Vibration motors in the orange pockets</figcaption></figure>
+      <figure><div class="frame"><img src="img/hat-wiring.jpg" width="1400" height="787" alt="Hands holding open the lining to show the Raspberry Pi, breadboard and ribbon cables inside."></div><figcaption>Raspberry Pi and wiring inside the lining</figcaption></figure>
+      <figure><div class="frame"><img src="img/hat-gyro.jpg" width="1400" height="787" alt="The gyroscope sensor on top of the hat, partly hidden by orange feathers."></div><figcaption>Gyroscope, tucked under the feathers</figcaption></figure>
+    </div>
+    <p class="note">Team photos.</p>
+    <p class="note">Team photos of the final hat.</p>
+    <h3 style="margin-top:34px">How the final hat behaves</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Situation</th><th>What the hat does</th></tr></thead>
+        <tbody>
+          <tr><td>Nothing nearby</td><td>Stays silent: no vibration, no voice</td></tr>
+          <tr><td>User slowly walks toward a wall</td><td>1 pulse on the side facing the wall</td></tr>
+          <tr><td>Object approaches at medium speed</td><td>2 pulses on that side</td></tr>
+          <tr><td>Object approaches fast</td><td>3 pulses on that side, then the spoken warning for that direction</td></tr>
+          <tr><td>User turns their head</td><td>Gyroscope pauses alerts so the turn isn't read as an approaching object</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="links-row">
+      <a class="linkbtn" href="https://youtu.be/e2rEarZUlzU" target="_blank" rel="noopener">Watch the demo video ↗</a>
+      <a class="linkbtn ghost" href="https://github.com/lamicodes/360Hat-Obstacle-Detection-System" target="_blank" rel="noopener">View the code on GitHub ↗</a>
+    </div>
+  </section>
+
+  <section class="wrap" id="limits">
+    <div class="shead">
+      <div class="row"><span class="label">Looking back · Limits</span><span class="who mine">My takeaways</span></div>
+      <h2>What I'd do differently</h2>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Limit</th><th>Why it matters</th><th>Next time</th></tr></thead>
+        <tbody>
+          <tr><td>My pulse function blocks the program.<span class="mine-tag">My code</span></td><td><code>VMbeep</code> uses <code>sleep</code>, so a level 3 alert pauses everything for 1.5 s while the other three sides go unchecked.</td><td>Run haptics on their own thread or with non-blocking timers.</td></tr>
+          <tr><td>Sensors are read one at a time.</td><td>With a 0.25 s pause per side, one full sweep takes over a second. A fast object can move more than a meter between readings, and one tester noticed the sensing “lags a bit.”</td><td>Read sensors in parallel and alert on the newest reading.</td></tr>
+          <tr><td>Direction still needs proof.<span class="mine-tag">My area</span></td><td>The pocket straps were meant to fix side detection, but a rating is a weak measure of it.</td><td>Ask people to name the side that buzzed and count how often they get it right. Try stronger motors with adjustable intensity.</td></tr>
+          <tr><td>Gyroscope thresholds are rough.</td><td>The cutoffs came from trial and error, so turn detection can mute real alerts.</td><td>Calibrate per user and smooth readings over time.</td></tr>
+          <tr><td>Testing was with other students only.</td><td>The people the hat is for weren't part of testing, and the survey didn't check whether people could tell 2 pulses from 3 while walking.</td><td>Test with blind and low-vision users and an orientation and mobility specialist.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="wrap" id="learned">
+    <div class="shead">
+      <div class="row"><span class="label">Reflection</span><span class="who mine">My takeaways</span></div>
+      <h2>What I learned</h2>
+    </div>
+    <div class="learned">
+      <div><h3>Feedback design is UX, even without a screen.</h3><p>Choosing where a vibration happens and how many times it repeats is an interface decision, just like choosing a button label.</p></div>
+      <div><h3>Silence is part of the design.</h3><p>Keeping the voice for the most dangerous moments is what makes it worth listening to.</p></div>
+      <div><h3>Test on the real hardware.</h3><p>My vibration patterns made sense on paper, but testers struggled to feel them through two layers of hat. The physical build is part of the feedback design.</p></div>
+      <div><h3>Timing is a shared resource.</h3><p>The 1.5-second pattern I designed competed with the sensing loop for time. Feedback and sensing have to be designed together.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Lamia Hasan · B.S. Computer Science (Software Engineering), Arizona State University</span>
+    <span class="links"><a href="https://lamiahasan.com/">lamiahasan.com</a><a href="https://linkedin.com/in/lamia-hsn">LinkedIn</a><a href="https://github.com/lamicodes">GitHub</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
