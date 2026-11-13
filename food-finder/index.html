@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ASU Campus Food Finder · Lamia Hasan</title>
+<meta name="description" content="UX case study by Lamia Hasan: ASU Campus Food Finder, a mobile app that helps students find food that fits the gap between classes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=Schibsted+Grotesk:wght@600;700;800&display=swap">
+<meta property="og:title" content="ASU Campus Food Finder · UX case study by Lamia Hasan">
+<meta property="og:description" content="Research, paper-prototype testing, redesign, Figma prototyping and an AI-assisted alternative for a campus food app.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://lamiahasan.com/food-finder/">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>
+/* Layout: one reading column on a notebook dot-grid ground, widening to full-bleed rows for before/after sketches. Section labels carry date, stage and whose work it was. */
+:root {
+  --paper: #f5f7f5;
+  --surface: #ffffff;
+  --ink: #18212d;
+  --muted: #586372;
+  --rule: #dce1e2;
+  --dot: #cdd4d4;
+  --accent: #0d766e;
+  --accent-soft: #e0f1ee;
+  --diet: #2d7f3a;
+  --fits: #2259a8;
+  --tight: #b83a26;
+  --walk: #8b97a6;
+  --canvas: #1e1e1e;
+  --canvas-text: #c9ced4;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #12161b; --surface: #1a2027; --ink: #e6e9ed; --muted: #9ba5b2; --rule: #2b333c; --dot: #252c34;
+    --accent: #45c2b1; --accent-soft: #163330; --diet: #6fc27c; --fits: #7ea9ee; --tight: #f08a74; --walk: #6c7888;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #12161b; --surface: #1a2027; --ink: #e6e9ed; --muted: #9ba5b2; --rule: #2b333c; --dot: #252c34;
+  --accent: #45c2b1; --accent-soft: #163330; --diet: #6fc27c; --fits: #7ea9ee; --tight: #f08a74; --walk: #6c7888;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.col { max-width: 68ch; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+.mono { font-family: var(--f-mono); }
+.label {
+  font-family: var(--f-mono); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted);
+}
+
+/* Hero */
+.hero {
+  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.3px);
+  background-size: 22px 22px;
+  border-bottom: 1px solid var(--rule);
+}
+.hero .wrap { padding-block: 64px 56px; display: grid; gap: 40px; }
+.hero h1 { font-size: clamp(2.4rem, 6vw, 4.1rem); font-weight: 800; line-height: 1.02; letter-spacing: -0.025em; }
+.lede { font-size: 1.25rem; line-height: 1.5; max-width: 52ch; margin-top: 18px; }
+.status {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 22px;
+  font-family: var(--f-mono); font-size: 0.8rem; padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--accent); color: var(--accent); background: var(--surface);
+}
+.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.meta {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px 32px;
+  border-top: 1px solid var(--rule); padding-top: 24px;
+}
+.meta div { min-width: 0; }
+.meta p { margin-top: 4px; font-size: 0.98rem; }
+
+/* Time budget: the app's core idea, drawn to scale (30-minute break) */
+.budget { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 22px 22px 18px; }
+.budget h2 { font-size: 1.15rem; font-weight: 700; }
+.budget > p { color: var(--muted); font-size: 0.95rem; margin-top: 4px; }
+.brows { display: grid; gap: 16px; margin-top: 20px; }
+.brow { display: grid; grid-template-columns: 7.5rem 1fr; gap: 6px 16px; align-items: center; }
+.brow .name { font-weight: 700; font-size: 0.95rem; }
+.bar { display: flex; height: 30px; border-radius: 5px; overflow: hidden; border: 1px dashed var(--muted); }
+.seg { display: flex; align-items: center; justify-content: center; font-family: var(--f-mono); font-size: 0.75rem; white-space: nowrap; overflow: hidden; }
+.seg.walk { background: var(--walk); color: #fff; }
+.seg.wait { background: var(--ink); color: var(--paper); }
+.seg.spare { color: var(--muted); }
+.verdict { grid-column: 2; font-family: var(--f-mono); font-size: 0.82rem; font-weight: 500; }
+.verdict.fits { color: var(--fits); }
+.verdict.tight { color: var(--tight); }
+.scale { display: grid; grid-template-columns: 7.5rem 1fr; gap: 16px; margin-top: 8px; }
+.ticks { position: relative; height: 1.2rem; border-top: 1px solid var(--rule); }
+.ticks span { position: absolute; top: 3px; white-space: nowrap; transform: translateX(-50%); font-family: var(--f-mono); font-size: 0.7rem; color: var(--muted); }
+.ticks span:first-child { transform: none; }
+.ticks span:last-child { transform: translateX(-100%); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 14px; font-size: 0.82rem; color: var(--muted); }
+.key i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+
+/* Sections */
+section { padding-block: 64px 8px; }
+.shead { display: grid; gap: 10px; margin-bottom: 22px; }
+.shead .row { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.shead h2 { font-size: clamp(1.6rem, 3.2vw, 2.15rem); font-weight: 700; line-height: 1.15; }
+.who {
+  font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 4px; border: 1px solid var(--accent); white-space: nowrap;
+}
+.who.mine { background: var(--accent); color: var(--paper); }
+.who.team { color: var(--muted); border-color: var(--rule); background: var(--surface); }
+.who.part { color: var(--accent); background: var(--accent-soft); border-color: transparent; }
+.prose { display: grid; gap: 14px; }
+.prose ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+h3 { font-size: 1.15rem; font-weight: 700; }
+
+.evidence { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 22px; }
+.evidence div { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; font-size: 0.95rem; }
+.evidence b { display: block; font-family: var(--f-mono); font-weight: 500; font-size: 1.35rem; margin-bottom: 4px; color: var(--accent); }
+
+.twocol { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px 40px; margin-top: 8px; }
+.twocol > div { min-width: 0; display: grid; gap: 8px; align-content: start; }
+.callout { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; margin-top: 22px; max-width: 68ch; }
+
+.tasks { list-style: none; margin: 18px 0 0; padding: 0; border-top: 1px solid var(--rule); max-width: 760px; }
+.tasks li { display: grid; grid-template-columns: 2rem 1fr auto; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+.tasks .n { font-family: var(--f-mono); color: var(--muted); font-size: 0.85rem; }
+.tasks .pri { font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted); text-align: right; }
+.tasks .pri.req { color: var(--accent); font-weight: 500; }
+
+/* Figures */
+figure { margin: 0; }
+.frame { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 12px; display: flex; justify-content: center; align-items: center; }
+.frame img { display: block; width: auto; max-width: 100%; height: auto; max-height: 440px; border-radius: 3px; }
+figcaption { font-size: 0.88rem; color: var(--muted); margin-top: 8px; }
+.wide { margin-top: 26px; }
+.wide .frame img { max-height: 520px; }
+.strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 26px; }
+.strip .frame img { max-height: 280px; }
+.strip figcaption { font-family: var(--f-mono); font-size: 0.75rem; }
+
+.ba { display: grid; gap: 22px; margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--rule); }
+.ba:first-of-type { border-top: 0; padding-top: 0; }
+.ba-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; align-items: baseline; }
+.ba-head h3 { font-size: 1.3rem; }
+.ba-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.ba-pair figure { min-width: 0; display: grid; gap: 8px; align-content: start; }
+.ba-pair .label { color: var(--ink); }
+.ba-pair .after .label { color: var(--accent); }
+.ba-pair .after .frame { border-color: var(--accent); }
+.ba-notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px 32px; }
+.ba-notes > div { min-width: 0; }
+.ba-notes ul { margin: 6px 0 0; padding-left: 1.1em; display: grid; gap: 4px; font-size: 0.97rem; }
+.principle { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.principle span { font-size: 0.8rem; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--ink); }
+
+.swatches { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 30px; padding: 16px 18px; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; align-items: center; }
+.swatches p { flex: 1 1 260px; font-size: 0.95rem; }
+.sw { display: inline-flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-size: 0.8rem; }
+.sw i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+
+.screens { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 22px; }
+.screen { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: grid; gap: 6px; align-content: start; }
+.screen .id { font-family: var(--f-mono); font-size: 0.75rem; color: var(--accent); }
+.screen .shot { display: flex; justify-content: center; padding: 12px; margin-bottom: 6px; background: var(--paper); border-radius: 6px; }
+.screen .shot img { display: block; width: 100%; max-width: 200px; height: auto; border: 1px solid var(--rule); border-radius: 4px; }
+.screen h3 { font-size: 1.02rem; }
+.screen p { font-size: 0.92rem; color: var(--muted); }
+.flow { margin-top: 18px; font-family: var(--f-mono); font-size: 0.82rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+.flow span { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 3px 8px; color: var(--ink); }
+.links-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.linkbtn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 6px; border: 1px solid var(--accent); background: var(--accent); color: var(--paper); font-family: var(--f-mono); font-size: 0.85rem; font-weight: 500; text-decoration: none; }
+.linkbtn.ghost { background: var(--surface); color: var(--accent); }
+.linkbtn:hover { filter: brightness(1.08); }
+.linkbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.proto-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; padding: 10px 16px; border: 1px solid var(--accent); border-radius: 6px; background: var(--surface); color: var(--accent); font-weight: 700; text-decoration: none; }
+.proto-link:hover { background: var(--accent-soft); }
+.proto-link span { font-family: var(--f-mono); font-weight: 400; font-size: 0.8rem; color: var(--muted); }
+
+.tablewrap { overflow-x: auto; margin-top: 20px; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 0.93rem; }
+th, td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--rule); }
+th { font-family: var(--f-mono); font-weight: 500; font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td .mine-tag { font-family: var(--f-mono); font-size: 0.7rem; color: var(--accent); display: block; margin-top: 4px; }
+
+.compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-top: 22px; }
+.compare > div { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px 18px; display: grid; gap: 6px; align-content: start; }
+.compare h3 { font-size: 1.02rem; }
+.compare p { font-size: 0.94rem; }
+.example { font-family: var(--f-mono); font-size: 0.85rem; background: var(--accent-soft); padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
+
+.plan { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0; margin-top: 22px; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); overflow: hidden; }
+.plan > div { padding: 14px 16px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin: 0 -1px -1px 0; }
+.plan p { font-size: 0.93rem; margin-top: 4px; }
+
+.learned { display: grid; gap: 18px; margin-top: 8px; max-width: 72ch; counter-reset: l; }
+.learned div { display: grid; grid-template-columns: 2.2rem 1fr; gap: 4px 12px; }
+.learned div::before { counter-increment: l; content: counter(l); font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; color: var(--accent); line-height: 1.2; grid-row: span 2; }
+.learned h3 { font-size: 1.08rem; }
+
+footer { margin-top: 72px; border-top: 1px solid var(--rule); }
+footer .wrap { padding-block: 28px 40px; display: flex; flex-wrap: wrap; gap: 10px 28px; justify-content: space-between; font-size: 0.9rem; color: var(--muted); }
+footer .links { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+
+@media (max-width: 640px) {
+  .hero .wrap { padding-block: 44px 40px; }
+  .brow, .scale { grid-template-columns: 1fr; }
+  .scale > span { display: none; }
+  .verdict { grid-column: 1; }
+  .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ba-pair { grid-template-columns: 1fr; }
+  .tasks li { grid-template-columns: 1.6rem 1fr; }
+  .tasks .pri { grid-column: 2; text-align: left; }
+  section { padding-block: 48px 4px; }
+}
+#summary { padding-block: 40px 0; }
+.glance { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); overflow: hidden; }
+.glance > div { min-width: 0; padding: 18px 20px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin: 0 -1px -1px 0; display: grid; gap: 6px; align-content: start; }
+.glance p:not(.label) { font-size: 0.98rem; }
+.shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px 14px; margin-top: 24px; padding: 18px; background: var(--canvas); border-radius: 10px; }
+.shots figure { min-width: 0; display: grid; gap: 8px; align-content: start; }
+.shots img { display: block; width: 100%; height: auto; border-radius: 4px; }
+.shots figcaption { margin: 0; font-family: var(--f-mono); font-size: 0.72rem; color: var(--canvas-text); }
+.shots-note { font-size: 0.88rem; color: var(--muted); margin-top: 8px; }
+@media (max-width: 640px) { .shots { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 12px; } }
+.backlink { display: inline-flex; align-items: center; gap: 6px; font-family: var(--f-mono); font-size: 0.8rem; color: var(--muted); text-decoration: none; margin-bottom: 18px; }
+.backlink:hover { color: var(--accent); }
+@media print {
+  section { padding-block: 34px 0; }
+  .hero .wrap { padding-block: 32px 28px; gap: 28px; }
+  .shead, h2, h3, .ba-head { break-after: avoid; }
+  .ba, .budget, figure, .screen, .compare > div, .evidence, .glance, .tablewrap, .plan, .learned div, .tasks li, .twocol, .callout, .swatches, .links-row, .strip { break-inside: avoid; }
+  .frame img { max-height: 330px; }
+  .wide .frame img { max-height: 360px; }
+  .strip .frame img { max-height: 200px; }
+  .shots { grid-template-columns: repeat(11, minmax(0, 1fr)); gap: 10px 6px; padding: 10px; break-inside: avoid; align-items: start; }
+  .shots figcaption { font-size: 0.62rem; }
+  #walkthrough { break-inside: avoid; }
+  .ba { margin-top: 24px; padding-top: 18px; gap: 14px; }
+  #redesign { break-before: page; }
+  #next, #learned { padding-block: 24px 0; }
+  footer { margin-top: 20px; break-inside: avoid; }
+  footer .wrap { padding-block: 14px 0; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <a class="backlink" href="/">← Back to Lamia's Library</a>
+      <p class="label">UX case study · CSE 463 Human-Computer Interaction · Arizona State University</p>
+      <h1 style="margin-top:14px">ASU Campus Food Finder</h1>
+      <p class="lede">A mobile app that helps students find food that fits the gap between classes, their diet, and their meal plan.</p>
+      <span class="status">In progress · digital prototyping and user testing</span>
+    </div>
+
+    <div class="meta">
+      <div><p class="label">My role</p><p>Usability redesign, Figma prototyping of the results-to-decision flow, AI-assisted prototype, context and task analysis</p></div>
+      <div><p class="label">Team</p><p>6 students. Labels on each section show which parts were my individual work.</p></div>
+      <div><p class="label">Timeline</p><p>September 2026 – December 2026</p></div>
+      <div><p class="label">Tools and methods</p><p>Figma (components, variables, conditionals), paper prototyping, usability testing, cognitive walkthrough</p></div>
+    </div>
+
+    <div class="budget" aria-labelledby="budget-title">
+      <h2 id="budget-title">The question every screen answers: will I make it to class?</h2>
+      <p>The redesign adds walk time and wait time together and compares the total against the break. A 30-minute break, drawn to scale:</p>
+      <div class="brows">
+        <div class="brow">
+          <span class="name">Einstein's</span>
+          <div class="bar" role="img" aria-label="4 minutes walking plus 12 minutes waiting, 16 of 30 minutes">
+            <span class="seg walk" style="flex:0 0 13.333%">4</span>
+            <span class="seg wait" style="flex:0 0 40%">12 wait</span>
+            <span class="seg spare" style="flex:1 1 auto"></span>
+          </div>
+          <span class="verdict fits">16 min total · Fits · 14 min spare</span>
+        </div>
+        <div class="brow">
+          <span class="name">Chick-fil-A</span>
+          <div class="bar" role="img" aria-label="6 minutes walking plus 20 minutes waiting, 26 of 30 minutes">
+            <span class="seg walk" style="flex:0 0 20%">6</span>
+            <span class="seg wait" style="flex:0 0 66.667%">20 wait</span>
+            <span class="seg spare" style="flex:1 1 auto"></span>
+          </div>
+          <span class="verdict tight">26 min total · Tight · 4 min spare</span>
+        </div>
+      </div>
+      <div class="scale" aria-hidden="true">
+        <span></span>
+        <div class="ticks"><span style="left:0">0</span><span style="left:33.333%">10</span><span style="left:66.667%">20</span><span style="left:100%">30 min</span></div>
+      </div>
+      <div class="key"><span><i style="background:var(--walk)"></i>Walk</span><span><i style="background:var(--ink)"></i>Wait in line</span><span><i style="border:1px dashed var(--muted)"></i>Time to spare</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="wrap" id="summary" aria-label="Project summary">
+    <div class="glance">
+      <div><p class="label">Problem</p><p>Students eating between classes can't tell whether a place fits their break, diet and meal plan without checking several apps.</p></div>
+      <div><p class="label">What I did</p><p>Turned usability-test notes into a redesign of three screens, built the results-to-decision half of the Figma prototype, and created the first AI-assisted prototype of a guided alternative.</p></div>
+      <div><p class="label">Where it stands</p><p>Each redesign change answers one of the three problems testers hit. A cognitive walkthrough found four more issues, all fixed. Next is a head-to-head test of the two versions.</p></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="problem">
+    <div class="shead">
+      <div class="row"><span class="label">September · Problem</span><span class="who team">Team</span></div>
+      <h2>Students have 15 minutes and four places to look</h2>
+    </div>
+    <div class="prose col">
+      <p>ASU students often eat in the gap between classes. Dining information is spread across Google Maps, ASU Dining pages, and word of mouth, and none of them answer the question that matters in that moment: can I get food here and still be on time?</p>
+      <p>Our team interviewed four students who eat on campus. What they described, paraphrased:</p>
+    </div>
+    <div class="evidence">
+      <div><b>15 min</b>One student sometimes had about 15 minutes between classes and skipped lunch because of the wait.</div>
+      <div><b>45 min</b>Another spent most of a 45-minute break waiting in one line.</div>
+      <div><b>Diet</b>A vegetarian student couldn't tell which places had options for her until she checked in person.</div>
+      <div><b>Sold out</b>One waited in a long line, then found out the item he wanted was unavailable.</div>
+    </div>
+  </section>
+
+  <section class="wrap" id="context">
+    <div class="shead">
+      <div class="row"><span class="label">September · Context and people</span><span class="who part">My part of the PACT analysis</span></div>
+      <h2>Designing for a phone checked between buildings</h2>
+    </div>
+    <div class="twocol">
+      <div>
+        <h3>People</h3>
+        <p>Students are the primary users and staff are secondary. They differ in diet (vegetarian, vegan, halal, kosher, allergies), budget, schedule, and how well they know campus. Some need wheelchair-accessible locations.</p>
+      </div>
+      <div>
+        <h3>Context</h3>
+        <p>The app is used while walking between classes or on a short break, usually alone and sometimes with a group. Opening hours, line length, crowding, and whether a place takes M&amp;G or meal swipes all decide what is practical.</p>
+      </div>
+    </div>
+    <p class="callout">This set the tradeoff the team designed around: a student with 15 minutes cares about distance and wait time, while a student with an hour cares about cuisine and price. Too much information on screen overwhelms the first student, and too little fails the second.</p>
+  </section>
+
+  <section class="wrap" id="tasks">
+    <div class="shead">
+      <div class="row"><span class="label">September · Tasks</span><span class="who part">I wrote the task descriptions</span></div>
+      <h2>Five tasks from the interviews</h2>
+    </div>
+    <div class="prose col">
+      <p>I turned the interview findings into five task descriptions. A teammate checked them with three more students, which led us to make comparison handle several places at once and to add price and meal-plan balance.</p>
+    </div>
+    <ol class="tasks">
+      <li><span class="n">1</span><span>Find food that fits the time available</span><span class="pri req">Required</span></li>
+      <li><span class="n">2</span><span>Find food that matches dietary needs</span><span class="pri">High</span></li>
+      <li><span class="n">3</span><span>Compare nearby places before choosing</span><span class="pri">High</span></li>
+      <li><span class="n">4</span><span>Check the menu and what's available before going</span><span class="pri">High</span></li>
+      <li><span class="n">5</span><span>Choose a place that works for a group</span><span class="pri">Secondary</span></li>
+    </ol>
+    <div class="prose col" style="margin-top:22px">
+      <p>We sketched two concepts, a search-and-filter directory and personalized recommendations, and chose search and filter because it gives students direct control over what they see.</p>
+    </div>
+  </section>
+
+  <section class="wrap" id="paper">
+    <div class="shead">
+      <div class="row"><span class="label">October · Paper prototypes and testing</span><span class="who team">Team</span></div>
+      <h2>Three students, three tasks, no help</h2>
+    </div>
+    <div class="prose col">
+      <p>The team drew a storyboard, a horizontal prototype covering the start of all five tasks, and a vertical prototype covering one full task: set your time and diet, see results, check a place, go. Three students outside the team each tried one task on paper while a teammate observed.</p>
+      <ul>
+        <li><b>A vegan student</b> found the diet filter but couldn't tell which restaurants had vegan meals.</li>
+        <li><b>A student short on time</b> liked the time filter but had to add walk and wait times in his head.</li>
+        <li><b>A student comparing two places</b> had to switch between pages to see them side by side.</li>
+      </ul>
+    </div>
+    <figure class="wide">
+      <div class="frame"><img src="img/storyboard.jpg" width="1446" height="1100" alt="Six-panel hand-drawn storyboard: a student leaves class with 15 minutes, remembers a long bagel line that made her late, filters the app for short waits, picks a place with a 4-minute wait, eats while walking, and arrives on time."></div>
+      <figcaption>Team storyboard. The persona has 15 minutes before her next class.</figcaption>
+    </figure>
+    <div class="strip">
+      <figure><div class="frame"><img src="img/v1-home.jpg" width="353" height="581" alt="Paper home screen with search, Price, Open Now, Time and Diet filters, and two restaurant cards."></div><figcaption>V1 · Home</figcaption></figure>
+      <figure><div class="frame"><img src="img/v4-before.jpg" width="359" height="570" alt="Paper results screen listing Einstein's and Chick-fil-A with walk and wait minutes and compare checkboxes."></div><figcaption>V4 · Results</figcaption></figure>
+      <figure><div class="frame"><img src="img/v4b-before.jpg" width="375" height="579" alt="Paper screen reading No place fit, with buttons to change time or filters."></div><figcaption>V4b · No results</figcaption></figure>
+      <figure><div class="frame"><img src="img/v6-before.jpg" width="416" height="592" alt="Paper screen titled Head to Einstein's showing walk time, wait time, opening hours, Get directions and Done."></div><figcaption>V6 · Decision</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="wrap" id="redesign">
+    <div class="shead">
+      <div class="row"><span class="label">October · Redesign</span><span class="who mine">My work</span></div>
+      <h2>Turning test notes into three redrawn screens</h2>
+    </div>
+    <div class="prose col">
+      <p>I collected the test notes, decided what to change, redrew the affected screens, and wrote the rationale. Every change traces back to something a participant struggled with.</p>
+    </div>
+
+    <div class="ba">
+      <div class="ba-head"><h3>Results</h3><span class="label">V4</span></div>
+      <div class="ba-pair">
+        <figure><span class="label">Before</span><div class="frame"><img src="img/v4-before.jpg" width="359" height="570" alt="Original results: header reads Fits 30 min, Vegetarian. Each card lists walk minutes and wait minutes separately."></div></figure>
+        <figure class="after"><span class="label">After</span><div class="frame"><img src="img/v4-after.jpg" width="563" height="955" alt="Redesigned results on dot-grid paper: checked chips for 30 min and Vegan at the top; Einstein's card shows Vegan options 3, 16 min total, Fits; Chick-fil-A shows Vegan options 1, 26 min total, Tight; a Compare 2 button."></div></figure>
+      </div>
+      <div class="ba-notes">
+        <div><p class="label">What changed</p>
+          <ul>
+            <li>Each card shows how many vegan options a place has (Einstein's 3, Chick-fil-A 1).</li>
+            <li>Walk and wait are added into one total, marked Fits or Tight, and results are sorted by total time.</li>
+            <li>Active filters sit at the top as checked chips, which also fixed a header that said "Vegetarian" when the filter was vegan.</li>
+          </ul></div>
+        <div><p class="label">Why</p>
+          <ul>
+            <li>The vegan tester had to open each place to check. Labels on the card let her see it at a glance.</li>
+            <li>The tester short on time was doing arithmetic. The total answers his real question directly.</li>
+          </ul>
+          <div class="principle"><span>Recognition rather than recall</span><span>Match with the real world</span><span>Visibility of system status</span></div></div>
+      </div>
+    </div>
+
+    <div class="ba">
+      <div class="ba-head"><h3>Compare</h3><span class="label">H4</span></div>
+      <div class="ba-pair">
+        <figure><span class="label">Before</span><div class="frame"><img src="img/compare-before.jpg" width="487" height="605" alt="Original compare screen: two columns, Einstein's and Chick-fil-A, with rows for wait, walk, price, payment and hours."></div></figure>
+        <figure class="after"><span class="label">After</span><div class="frame"><img src="img/compare-after.jpg" width="568" height="955" alt="Redesigned compare screen with a back link to results, total time, vegan option counts, Fits and Tight markers, and a Go here button under each column."></div></figure>
+      </div>
+      <div class="ba-notes">
+        <div><p class="label">What changed</p>
+          <ul>
+            <li>Added total time, vegan option count, and Fits/Tight to each column.</li>
+            <li>Added a "Go here" button per column and a link back to results that keeps the selections.</li>
+            <li>Reused the existing compare screen instead of drawing a new one, so comparing looks the same from Results or the Compare tab.</li>
+          </ul></div>
+        <div><p class="label">Why</p>
+          <ul>
+            <li>The comparison tester had to leave the comparison to make a choice. Now he can decide from it.</li>
+          </ul>
+          <div class="principle"><span>Efficiency of use</span><span>Consistency and standards</span></div></div>
+      </div>
+    </div>
+
+    <div class="ba">
+      <div class="ba-head"><h3>Place page</h3><span class="label">V5</span></div>
+      <div class="ba-pair">
+        <figure><span class="label">Before</span><div class="frame"><img src="img/place-before.jpg" width="393" height="503" alt="Original place page for Einstein's: Menu, Hours, Wait tabs and a menu list with prices, no dietary information."></div></figure>
+        <figure class="after"><span class="label">After</span><div class="frame"><img src="img/place-after.jpg" width="577" height="955" alt="Redesigned place page: total time, a checked Vegan only toggle, and green vegan labels beside each menu item."></div></figure>
+      </div>
+      <div class="ba-notes">
+        <div><p class="label">What changed</p>
+          <ul>
+            <li>Vegan labels sit beside individual menu items.</li>
+            <li>The "Vegan only" filter carries over from Results, so non-vegan items stay hidden.</li>
+          </ul></div>
+        <div><p class="label">Why</p>
+          <ul>
+            <li>Users shouldn't have to pick the same filter twice on the way to a decision.</li>
+          </ul>
+          <div class="principle"><span>Recognition rather than recall</span><span>Consistency</span></div></div>
+      </div>
+    </div>
+
+    <div class="swatches">
+      <p>I used color only for information that was new in the redesign, one meaning per color:</p>
+      <span class="sw"><i style="background:var(--diet)"></i>Diet labels</span>
+      <span class="sw"><i style="background:var(--fits)"></i>Fits</span>
+      <span class="sw"><i style="background:var(--tight)"></i>Tight</span>
+    </div>
+  </section>
+
+  <section class="wrap" id="figma">
+    <div class="shead">
+      <div class="row"><span class="label">Late October · Figma prototype</span><span class="who mine">My work: second half</span></div>
+      <h2>Building the decision flow in Figma</h2>
+    </div>
+    <div class="prose col">
+      <p>The team split the vertical prototype. A teammate built Home and the two filters; I built the second half and then linked and tested the full flow. Everything uses the team's shared components. Figma can't filter real data, so I used variables and conditionals to simulate selections and state. The screens below are as I built them, before the walkthrough fixes in the next section.</p>
+    </div>
+    <div class="screens">
+      <div class="screen"><div class="shot"><img src="img/a6-v4.png" width="174" height="376" alt="Figma results screen: checked chips for 30 min and Vegan; Einstein's card with Vegan options 3, 16 min total, a Fits pill, 4 min walk plus 12 min wait and a compare checkbox; Chick-fil-A with Vegan options 1, 26 min total and a Tight pill; a Compare 2 button."></div><span class="id">V4</span><h3>Results</h3><p>Selected filters stay visible. Each card has vegan counts, walk and wait times with Fits/Tight, and a compare checkbox feeding a "Compare 2" button.</p></div>
+      <div class="screen"><div class="shot"><img src="img/a6-v4b.png" width="173" height="376" alt="Figma no-results screen: chips for 10 min and Vegan, the message No place fits. Try more time or fewer filters, and Change time and Change filters buttons."></div><span class="id">V4b</span><h3>No results</h3><p>"No place fits" with direct options to change the time or the filters, so users aren't left at a dead end.</p></div>
+      <div class="screen"><div class="shot"><img src="img/a6-v5.png" width="174" height="376" alt="Figma place page for Einstein's: photo placeholder, 16 min total with walk, wait and closing time, Menu, Hours and Wait tabs, Vegan only checked, three menu items with vegan labels and prices, and a Go here button."></div><span class="id">V5</span><h3>Place page</h3><p>Menu, Hours and Wait tabs, with vegan labels on menu items.</p></div>
+      <div class="screen"><div class="shot"><img src="img/a6-v6.png" width="174" height="376" alt="Figma decision screen titled Head to Einstein's with 4 min walk, 12 min wait, open till 3 PM, and Get direction and Done buttons."></div><span class="id">V6</span><h3>Decision</h3><p>"Head to Einstein's" with walk time, wait time and closing time, plus Get directions and Done.</p></div>
+    </div>
+    <div class="flow" aria-label="Prototype path">
+      <span>Home</span>→<span>Time: 30 min</span>→<span>Diet: Vegan</span>→<span>Results</span>→<span>Einstein's</span>→<span>Go here</span>→<span>Done</span>
+    </div>
+    <div class="links-row">
+      <a class="linkbtn" href="https://www.figma.com/design/1GvSLg7zbXxswCKU4gnt5L/CSE-463?node-id=195-1739&amp;p=f&amp;t=sn9uvZzKvbCGoTxF-0" target="_blank" rel="noopener">Open the Figma prototype ↗</a>
+    </div>
+    <a class="proto-link" href="https://www.figma.com/design/1GvSLg7zbXxswCKU4gnt5L/CSE-463?node-id=195-1739" target="_blank" rel="noopener">View the Figma prototype ↗ <span>figma.com</span></a>
+  </section>
+
+  <section class="wrap" id="walkthrough">
+    <div class="shead">
+      <div class="row"><span class="label">Late October · Cognitive walkthrough</span><span class="who team">Team</span></div>
+      <h2>What the walkthrough caught, including in my screens</h2>
+    </div>
+    <div class="prose col">
+      <p>A teammate walked the full task (find a vegan place that fits a 30-minute break) and asked the four cognitive walkthrough questions at each step. Two of the four issues were in screens I built.</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Issue</th><th>Principle</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>The Time and Diet chips on Home were gray on gray and looked like labels, not buttons.</td><td>Visibility, affordance</td><td>Teal outline and an icon on both chips.</td></tr>
+          <tr><td>"Show places that fit" promised results before the diet step, and the time options had no units.</td><td>Match with expectations, error prevention</td><td>Renamed the button "Next: Diet".</td></tr>
+          <tr><td>Fits and Tight relied on color alone, and "Tight" was never explained.<span class="mine-tag">My screen</span></td><td>Accessibility, cognitive load</td><td>Spelled it out: "Tight: 4 min spare".</td></tr>
+          <tr><td>The second half used a different font and background, and the decision buttons were all caps.<span class="mine-tag">My screens</span></td><td>Consistency, system status</td><td>Sentence-case buttons ("Get directions", "Done") and matching navigation styles.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="wrap" id="ai">
+    <div class="shead">
+      <div class="row"><span class="label">Late October · AI-assisted alternative</span><span class="who mine">My work: first AI prototype</span></div>
+      <h2>Revisiting the concept we passed on</h2>
+    </div>
+    <div class="prose col">
+      <p>In September we chose filters over personalized recommendations. I created the first AI-assisted Figma prototype from our proposal and task requirements to test the other direction properly: a short guided flow that asks about time, diet and budget, then recommends a few places with a one-line reason each. It covered 11 screens, from a solo-or-group welcome to a no-results screen with alternatives. Teammates then refined the screens and made them interactive.</p>
+    </div>
+    <div class="shots" role="list" aria-label="AI-assisted prototype screens">
+      <figure role="listitem"><img src="img/ai-01.png" width="216" height="590" alt="Welcome screen with the headline Good food. Between classes., a 20-minutes callout, and Solo dining or Group dining options."><figcaption>01 Welcome</figcaption></figure>
+      <figure role="listitem"><img src="img/ai-02.png" width="217" height="590" alt="Step 1 of 3, required: How much time do you have? with 10, 20 and 30 minute options, starting location Hayden Library, and a step-free route toggle."><figcaption>02 Available time</figcaption></figure>
+      <figure role="listitem"><img src="img/ai-03.png" width="217" height="590" alt="Step 2 of 3, optional: Any dietary needs? with vegetarian, vegan, halal, kosher and allergy options and a Skip this question button."><figcaption>03 Dietary needs</figcaption></figure>
+      <figure role="listitem"><img src="img/ai-04.png" width="216" height="616" alt="Step 3 of 3, optional: budget up to 8, 12 or 18 dollars, payment by M&amp;G, meal swipes or out of pocket, and a plan summary."><figcaption>04 Budget and payment</figcaption></figure>
+      <figure role="listitem"><img src="img/ai-05.png" width="217" height="771" alt="Three picks for you: Qdoba at 12 minutes total from 9 dollars, Subway at 14, and Engrained Cafe at 16, each with walk, wait and meal times and minutes to spare."><figcaption>05 Recommendations</figcaption></figure>
+      <figure role="listitem"><img src="img/ai-06.png" width="217" height="676" alt="Side-by-side comparison of Qdoba and Engrained Cafe: total time, distance, price, wait, hours, crowd level, dietary labels, payment and access."><figcaption>06 Comparison</figcaption></figure>
+      <figure role="listitem"><img src="img/ai-07.png" width="216" height="711" alt="Qdoba details: 12 minutes total, 8 to spare, hours and crowd, and an example menu with vegetarian and vegan labels."><figcaption>07 Restaurant details</figcaption></figure>
+      <figure role="listitem"><img src="img/ai-08.png" width="216" height="744" alt="Plan a group break: three people, each with dietary needs, budget and time, plus Add another person."><figcaption>08 Group preferences</figcaption></figure>
+      <figure role="listitem"><img src="img/ai-09.png" width="217" height="684" alt="Two places that fit the group, Qdoba and Subway, with how each fits every person and what to verify."><figcaption>09 Group picks</figcaption></figure>
+      <figure role="listitem"><img src="img/ai-10.png" width="216" height="667" alt="You're heading to Qdoba: selected meal, a 12-minute total broken into walk, wait and meal, and step-by-step walking directions."><figcaption>10 Final selection</figcaption></figure>
+      <figure role="listitem"><img src="img/ai-11.png" width="216" height="694" alt="Nothing fits all needs yet: what's getting in the way for time, budget and diet, with suggested adjustments such as allowing 15 minutes."><figcaption>11 No results</figcaption></figure>
+    </div>
+    <p class="shots-note">Screens captured from the Figma file. Use the link below to click through the prototype.</p>
+    <div class="compare">
+      <div><span class="label">Filter version</span><h3>Faster for returning users</h3><p>Restaurants show up on Home right away and filters adjust in place. Fewer screens and taps, but the walkthrough showed the filter chips were easy to miss.</p></div>
+      <div><span class="label">Guided AI version</span><h3>Clearer for first-time users</h3><p>One question per screen, a progress bar, and exact time math such as <span class="example">12 min total · 8 min to spare</span> instead of color alone. More taps.</p></div>
+    </div>
+    <div class="links-row">
+      <a class="linkbtn" href="https://www.figma.com/proto/uNNEuMRX3PSGNKInEAsXdi/CSE-463---A7-AI-Prototype?node-id=20-8&amp;starting-point-node-id=20%3A8" target="_blank" rel="noopener">Try the AI-assisted prototype ↗</a>
+      <a class="linkbtn ghost" href="https://www.figma.com/design/1GvSLg7zbXxswCKU4gnt5L/CSE-463?node-id=195-1739&amp;p=f&amp;t=sn9uvZzKvbCGoTxF-0" target="_blank" rel="noopener">Compare with the filter version ↗</a>
+    </div>
+    <a class="proto-link" href="https://www.figma.com/proto/uNNEuMRX3PSGNKInEAsXdi/CSE-463---A7-AI-Prototype?node-id=20-8&amp;starting-point-node-id=20%3A8" target="_blank" rel="noopener">Try the AI-assisted prototype ↗ <span>figma.com</span></a>
+  </section>
+
+  <section class="wrap" id="next">
+    <div class="shead">
+      <div class="row"><span class="label">November – December · Next</span><span class="who team">Team · planned</span></div>
+      <h2>Testing the two versions against each other</h2>
+    </div>
+    <div class="prose col">
+      <p><b>Design question:</b> does the guided flow help first-time users pick a place that fits their break and diet more accurately than the filter version, and how much extra time does it cost?</p>
+      <p>We expect fewer errors and higher confidence with the guided flow, at the cost of a longer task. Results go here when the test is done.</p>
+    </div>
+    <div class="plan">
+      <div><p class="label">Participants</p><p>4–6 ASU students who eat on campus between classes, new to both prototypes</p></div>
+      <div><p class="label">Task</p><p>"You have a 30-minute break and you eat vegan. Find a place that fits and get directions."</p></div>
+      <div><p class="label">Order</p><p>Half start with each version to control for learning</p></div>
+      <div><p class="label">Measures</p><p>Completion, time on task, taps, errors, and a 1–7 ease rating</p></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="learned">
+    <div class="shead">
+      <div class="row"><span class="label">So far · Reflection</span><span class="who mine">My takeaways</span></div>
+      <h2>What I've learned</h2>
+    </div>
+    <div class="learned">
+      <div><h3>Color can't carry meaning by itself.</h3><p>My Fits/Tight marker made sense to me and still failed the walkthrough. Writing "4 min spare" works for everyone, including people who can't tell red from blue.</p></div>
+      <div><h3>Answer the question the user is actually asking.</h3><p>Students don't want walk time and wait time. They want to know if they'll make it to class. Doing that addition for them was the most useful change in the redesign.</p></div>
+      <div><h3>Reuse a screen before designing a new one.</h3><p>Reusing the compare screen kept the app consistent and meant one less screen for users to learn.</p></div>
+      <div><h3>AI is good for exploring a direction, not for deciding.</h3><p>The generated prototype gave us a complete alternative to compare against, but it still needed the same heuristic review as our hand-built screens.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Lamia Hasan · B.S. Computer Science (Software Engineering), Arizona State University</span>
+    <span class="links"><a href="https://lamiahasan.com/">lamiahasan.com</a><a href="https://linkedin.com/in/lamia-hsn">LinkedIn</a><a href="https://github.com/lamicodes">GitHub</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
