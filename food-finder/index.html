@@ -185,6 +185,14 @@ figcaption { font-size: 0.88rem; color: var(--muted); margin-top: 8px; }
 .screen .shot img { display: block; width: 100%; max-width: 200px; height: auto; border: 1px solid var(--rule); border-radius: 4px; }
 .screen h3 { font-size: 1.02rem; }
 .screen p { font-size: 0.92rem; color: var(--muted); }
+.aiproc { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 22px; }
+.aiproc .screen .step { font-family: var(--f-display); font-weight: 800; font-size: 1.3rem; color: var(--accent); line-height: 1; }
+.aiproc .screen .who { justify-self: start; }
+.prompt { margin-top: 22px; max-width: 760px; background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 16px 18px; }
+.prompt p { font-family: var(--f-mono); font-size: 0.84rem; line-height: 1.6; color: var(--ink); margin: 0; }
+.prompt p + p { margin-top: 10px; }
+.prompt .label { margin-bottom: 8px; }
+@media print { .aiproc .screen, .prompt { break-inside: avoid; } }
 .flow { margin-top: 18px; font-family: var(--f-mono); font-size: 0.82rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
 .flow span { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 3px 8px; color: var(--ink); }
 .links-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
@@ -538,6 +546,19 @@ footer .links { display: flex; flex-wrap: wrap; gap: 6px 18px; }
     <div class="prose col">
       <p>In September we chose filters over personalized recommendations. I created the first AI-assisted Figma prototype from our proposal and task requirements to test the other direction properly: a short guided flow that asks about time, diet and budget, then recommends a few places with a one-line reason each. It covered 11 screens, from a solo-or-group welcome to a no-results screen with alternatives. Teammates then refined the screens and made them interactive.</p>
     </div>
+    <h3 style="margin-top:30px">How I used AI</h3>
+    <div class="aiproc">
+      <div class="screen"><span class="step">1</span><span class="who mine">Mine</span><h3>Wrote the brief</h3><p>I turned our PACT analysis and five prioritized tasks into one prompt: who the users are, where they use the app (walking, on a short break), and what each task has to let them do, including what happens when nothing fits.</p></div>
+      <div class="screen"><span class="step">2</span><span class="who mine">Mine</span><h3>Steered it away from our own design</h3><p>I told the AI not to start with a restaurant directory or filter chips, which is what our filter version does. The point was a real alternative to compare against, not a copy.</p></div>
+      <div class="screen"><span class="step">3</span><span class="who mine">Mine</span><h3>Set the design rules</h3><p>I spelled out the standards: recognition rather than recall, large touch targets, good contrast, dietary labels on restaurants and menu items, and realistic sample data such as “Updated 3 min ago.”</p></div>
+      <div class="screen"><span class="step">4</span><span class="who team">Team</span><h3>Reviewed and refined by people</h3><p>A teammate reviewed the generated screens against usability principles and improved them with follow-up prompts. Another linked the screens by hand to make the prototype clickable.</p></div>
+    </div>
+    <div class="prompt">
+      <p class="label">From my prompt</p>
+      <p>Base the app on personalized recommendations. Do not start with a restaurant directory or filter chips. Ask a few short questions, show a few recommendations with a short justification, like "Total time: 12 min. Accepts M&amp;G. Has vegetarian entrees."</p>
+      <p>Create separate and editable portrait frame for each screen, with consistent visuals, good contrast, and large touch targets. Enable recognition rather than recall, and make selected items obvious.</p>
+    </div>
+    <p class="note" style="font-size:0.9rem;color:var(--muted);margin-top:10px;max-width:68ch">The justification line in the prompt carried through: the AI version shows exact time math such as “12 min total · 8 min to spare,” which doesn't rely on color the way our Fits/Tight labels did.</p>
     <div class="shots" role="list" aria-label="AI-assisted prototype screens">
       <figure role="listitem"><img src="img/ai-01.png" width="216" height="590" alt="Welcome screen with the headline Good food. Between classes., a 20-minutes callout, and Solo dining or Group dining options."><figcaption>01 Welcome</figcaption></figure>
       <figure role="listitem"><img src="img/ai-02.png" width="217" height="590" alt="Step 1 of 3, required: How much time do you have? with 10, 20 and 30 minute options, starting location Hayden Library, and a step-free route toggle."><figcaption>02 Available time</figcaption></figure>
